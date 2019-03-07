@@ -1,0 +1,9 @@
+/node_modules
+/src/helpers/screenshots
+creds.js
+package-lock.json
+.git
+.*.swp
+._*
+!.babelrc
+/mochawesome-report
