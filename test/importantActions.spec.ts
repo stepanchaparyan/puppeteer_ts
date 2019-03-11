@@ -1,9 +1,12 @@
-import launchPuppeteer from '../launchPuppeteer';
 import { expect } from 'chai';
+import launchPuppeteer from '../launchPuppeteer';
 import FlowBot from '../src/pageObjects/importantActionsPO';
 import LoginPage from '../src/pageObjects/loginPagePO';
 
-let browser, page, loginPage, flowBot;
+let browser;
+let page;
+let loginPage;
+let flowBot;
 const viewport = { width: 1020, height: 1080 };
 
 describe('Important Actions', () => {

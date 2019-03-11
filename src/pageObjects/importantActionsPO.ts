@@ -1,17 +1,17 @@
-import { NAVBAR } from '../helpers/constants/navbarConstants.js';
 import { BOT_SECTION } from '../helpers/constants/botsSectionConstants.js';
+import { NAVBAR } from '../helpers/constants/navbarConstants.js';
 import Utils from '../helpers/utils';
 
 export default class FlowBot {
 	private page: any;
 	private utils: any;
 
-	constructor (page) {
+	constructor(page) {
 		this.page = page;
 		this.utils = new Utils(page);
 	}
 
-	async createBotByImportantActionDoc () : Promise<boolean> {
+	public async createBotByImportantActionDoc(): Promise<boolean> {
 		await this.page.click(NAVBAR.SELECTORS.BOTS);
 		await this.utils.clickOnCreateBotButton();
 		await this.page.waitFor(800);
@@ -22,7 +22,7 @@ export default class FlowBot {
 		await this.page.type(BOT_SECTION.SELECTORS.BOT_NAME_INPUT, 'testBotIA');
 		await this.page.click(BOT_SECTION.SELECTORS.CREATE_BOT_BUTTON_AFTER_TYPE_NAME);
 
-		//* Free text
+		// * Free text
 		await this.page.waitFor(800);
 		await this.page.click(BOT_SECTION.SELECTORS.EDIT_FIRST_QUESTION);
 		await this.page.waitFor(800);
@@ -32,7 +32,7 @@ export default class FlowBot {
 		await this.page.select(BOT_SECTION.SELECTORS.CHOOSE_QUESTION_TYPE, 'Freetext Feedback');
 		await this.page.click(BOT_SECTION.SELECTORS.QUESTION_SAVE_BUTTON);
 
-		//* Options
+		// * Options
 		await this.page.waitFor(500);
 		await this.page.click(BOT_SECTION.SELECTORS.ADD_SUB_DIALOG);
 		await this.page.waitFor(500);
@@ -49,7 +49,7 @@ export default class FlowBot {
 		await this.page.type(BOT_SECTION.SELECTORS.ADD_NEW_ANSWER_INPUT, 'No');
 		await this.page.click(BOT_SECTION.SELECTORS.SAVE_NEW_ANSWER);
 
-		//* Multiple options
+		// * Multiple options
 		await this.page.waitFor(500);
 		await this.page.click(BOT_SECTION.SELECTORS.ADD_SUB_DIALOG);
 		await this.page.type(BOT_SECTION.SELECTORS.ENTER_QUESTION_INPUT, 'You are a man or woman?');
@@ -68,7 +68,7 @@ export default class FlowBot {
 		await this.page.type(BOT_SECTION.SELECTORS.ADD_NEW_ANSWER_INPUT, 'Girl - Woman');
 		await this.page.click(BOT_SECTION.SELECTORS.SAVE_NEW_ANSWER);
 
-		//? new question for boy
+		// ? new question for boy
 		await this.page.waitFor(500);
 		await this.page.click(BOT_SECTION.SELECTORS.QUESTION_ON_ANSWER_BOY);
 		await this.page.waitFor(500);
@@ -78,7 +78,7 @@ export default class FlowBot {
 		await this.page.select(BOT_SECTION.SELECTORS.CHOOSE_QUESTION_TYPE, 'Freetext Feedback');
 		await this.page.click(BOT_SECTION.SELECTORS.SAVE_NEW_ANSWER);
 
-		//* DataPicker
+		// * DataPicker
 		await this.page.waitFor(500);
 		await this.page.click(BOT_SECTION.SELECTORS.ADD_SUB_DIALOG);
 		await this.page.waitFor(500);
@@ -88,7 +88,7 @@ export default class FlowBot {
 		await this.page.select(BOT_SECTION.SELECTORS.CHOOSE_QUESTION_TYPE, 'Datepicker');
 		await this.page.click(BOT_SECTION.SELECTORS.QUESTION_SAVE_BUTTON);
 
-		//* Location
+		// * Location
 		await this.page.waitFor(500);
 		await this.page.click(BOT_SECTION.SELECTORS.ADD_SUB_DIALOG);
 		await this.page.waitFor(500);
@@ -98,14 +98,14 @@ export default class FlowBot {
 		await this.page.select(BOT_SECTION.SELECTORS.CHOOSE_QUESTION_TYPE, 'Location picker');
 		await this.page.click(BOT_SECTION.SELECTORS.QUESTION_SAVE_BUTTON);
 
-		//! new question for girl
+		// ! new question for girl
 		await this.page.waitFor(500);
 		await this.page.click(BOT_SECTION.SELECTORS.QUESTION_ON_ANSWER_GIRL);
 		await this.page.waitFor(500);
 		await this.page.type(BOT_SECTION.SELECTORS.FILL_WITH_EXISTING_QUESTION, 'Where are you from?');
 		await this.page.click(BOT_SECTION.SELECTORS.QUESTION_SAVE_BUTTON);
 
-		//* URL
+		// * URL
 		await this.page.waitFor(500);
 		await this.page.click(BOT_SECTION.SELECTORS.ADD_SUB_DIALOG);
 		await this.page.type(BOT_SECTION.SELECTORS.ENTER_QUESTION_INPUT, 'This is the form for your profile:');
@@ -120,7 +120,7 @@ export default class FlowBot {
 		await this.page.type(BOT_SECTION.SELECTORS.URL_INPUT_FOR_PATH_PARAMETER2, 'datepicker_option_1');
 		await this.page.click(BOT_SECTION.SELECTORS.QUESTION_SAVE_BUTTON);
 
-		//* Slider custom
+		// * Slider custom
 		await this.page.waitFor(500);
 		await this.page.click(BOT_SECTION.SELECTORS.ADD_SUB_DIALOG);
 		await this.page.type(BOT_SECTION.SELECTORS.ENTER_QUESTION_INPUT, 'Please choose your IQ level from 1 to 100');
@@ -171,7 +171,7 @@ export default class FlowBot {
 		await this.page.type(BOT_SECTION.SELECTORS.SLIDER_CUSTOM_DEFAULT_VALUE, '50');
 		await this.page.click(BOT_SECTION.SELECTORS.QUESTION_SAVE_BUTTON);
 
-		//* Slider
+		// * Slider
 		await this.page.waitFor(500);
 		await this.page.click(BOT_SECTION.SELECTORS.ADD_SUB_DIALOG);
 		await this.page.type(BOT_SECTION.SELECTORS.ENTER_QUESTION_INPUT, 'Please mark the bot from 1 to 10');
@@ -200,7 +200,7 @@ export default class FlowBot {
 		await this.page.type(BOT_SECTION.SELECTORS.SLIDER_DEFAULT_INPUT, '5');
 		await this.page.click(BOT_SECTION.SELECTORS.QUESTION_SAVE_BUTTON);
 
-		//* Search
+		// * Search
 		// await this.page.waitFor(500);
 		// await this.page.click(BOT_SECTION.SELECTORS.ADD_SUB_DIALOG);
 		// await this.page.type(BOT_SECTION.SELECTORS.ENTER_QUESTION_INPUT, 'This is the result of our demo bot');
@@ -223,7 +223,8 @@ export default class FlowBot {
 		// await this.page.click(BOT_SECTION.SELECTORS.QUESTION_SAVE_BUTTON);
 
 		// //? only for screenshots
-		// await this.page.evaluate(() => {document.querySelector('body > app-root > div > iox-page-container > div > iox-create > div > iox-conversation-tree > div > div.conversation-page > div > tree > tree-internal > ul > li > tree-internal:nth-child(9) > ul > li > tree-internal > ul > li > div > div.node-value.ng-star-inserted > div > div > button.btn.btn-primary.btn-xs.pull-right > span')
+		// await this.page.evaluate(() => {
+		// 	document.querySelector('body > app-root > div > iox-page-container > div > iox-create > div > iox-conversation-tree > div > div.conversation-page > div > tree > tree-internal > ul > li > tree-internal:nth-child(9) > ul > li > tree-internal > ul > li > div > div.node-value.ng-star-inserted > div > div > button.btn.btn-primary.btn-xs.pull-right > span')
 		// 	.scrollIntoView();
 		// });
 		// await this.utils.compareScreenshots('flowBot', 'bot1');
@@ -235,7 +236,7 @@ export default class FlowBot {
 		// await this.page.click(BOT_SECTION.SELECTORS.TRAIN);
 		// await this.page.waitFor(200000); // 2 minutes
 
-		return await true;
+		return true;
 	}
 
 }

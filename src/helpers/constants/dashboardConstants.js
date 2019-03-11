@@ -22,9 +22,9 @@ module.exports = {
             CONTACT_US: 'body > app-root > div > iox-page-container > div > iox-dashboard > div > div.col-lg-7.col-md-7.col-sm-12.col-xs-12.dashboard-column-left > div.col-lg-12.col-md-12.col-sm-12.col-xs-12 > div > div.platform-status-contact > a'
         },
         BOT: {
-            FULLBOT: 'body > app-root > div',
+            FULL_BOT: 'body > app-root > div',
             NAME: 'body > app-root > div > iox-chat-window > div > div > div.panel-heading.top-bar > div > h3',
-            BYIOXLINK: 'body > app-root > div > iox-chat-window > div > div > div.panel-heading.top-bar > div > a > img',
+            BYIOX_LINK: 'body > app-root > div > iox-chat-window > div > div > div.panel-heading.top-bar > div > a > img',
             QUESTION_FIRST_ANSWER_TWO: 'body > app-root > div > iox-chat-window > div > div > div.ans-container-base > chat-select > div.chat-select > div > div > button:nth-child(2)'
         }
     }

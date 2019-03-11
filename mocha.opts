@@ -1,0 +1,4 @@
+--require ts-node/register test/allTests.spec.ts
+--reporter mochawesome 
+--timeout 600000
+--slow 2000

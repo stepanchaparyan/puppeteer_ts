@@ -1,3 +1,3 @@
 import './dashboard.spec';
 import './importantActions.spec';
-import './createBot.spec';
+import './botSection.spec';
