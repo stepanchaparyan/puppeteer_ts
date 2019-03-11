@@ -99,13 +99,14 @@ describe('Bot section', () => {
 		it.only('C6166 - Check the `Delete NLP Bot` (trained) buttonDisabled functionality', async () => {
 			expect(await botSection.deleteTrainedNLPBotButtonDisabled()).to.equal(true);
 		});
-		it('C6166 - Check the `Delete NLP Bot` (trained) cancel functionality', async () => {
+		it.only('C6166 - Check the `Delete NLP Bot` (trained) cancel functionality', async () => {
 			expect(await botSection.deleteTrainedNLPBotCancel()).to.equal(true);
 		});
-		it('C6166 - Check the `Delete NLP Bot` (trained) delete functionality', async () => {
+		it.only('C6166 - Check the `Delete NLP Bot` (trained) delete functionality', async () => {
 			expect(await botSection.deleteTrainedNLPBot()).to.equal(true);
 		});
 	});
+
 	context('deleteBot', () => {
 		it('delete testBotForC282', async () => {
 			expect(await botSection.deleteBot('testBotForC282', 10)).to.equal(true);

@@ -6,7 +6,12 @@
 		"test": "mocha --opts mocha.opts",
 		"lint": "tslint -c tslint.json src/**/*.{ts,tsx} test/**/*.{ts,tsx} --fix --format verbose"
 	},
-	"keywords": [ "testing", "mocha", "chai", "puppeteer" ],
+	"keywords": [
+		"testing",
+		"mocha",
+		"chai",
+		"puppeteer"
+	],
 	"dependencies": {
 		"@types/chai": "^4.1.7",
 		"@types/mocha": "^5.2.6",

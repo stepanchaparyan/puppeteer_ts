@@ -1,5 +1,5 @@
 /node_modules
-/src/helpers/screenshots
+/src/helpers/screenshots/*.png
 creds.js
 package-lock.json
 .git
