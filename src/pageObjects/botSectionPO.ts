@@ -401,11 +401,11 @@ export default class BotSection {
 		await this.page.type(BOT_SECTION.SELECTORS.GOOGLE_HOME_INPUT_1,'newagent-4dfa0');
 		await this.page.type(BOT_SECTION.SELECTORS.GOOGLE_HOME_INPUT_2,'237d84ca4fc8457c8b3cf8c4c348476b');
 		await this.page.click(BOT_SECTION.SELECTORS.INTEGRATE_BUTTON);
-		await this.page.waitFor(1500); //!
+		await this.page.waitFor(500); //!
 		await this.page.click(BOT_SECTION.SELECTORS.RUN);
-		await this.page.waitFor(1700); //!
+		await this.page.waitFor(700); //!
 		await this.page.click(BOT_SECTION.SELECTORS.TRAIN);
-		await this.page.waitFor(60000);
+		await this.page.waitFor(50000);
 		await this.page.waitForSelector(BOT_SECTION.SELECTORS.PROGRESS_BAR, { hidden: true });
 		await this.page.waitFor(1000);
 		// type wrong word (not 'delete') and verify that button is remain disabled

@@ -1,5 +1,6 @@
 /node_modules
-/src/helpers/screenshots/*.png
+/src/helpers/screenshots/flowBot/*.png
+/src/helpers/screenshots/NLPBot/*.png
 creds.js
 package-lock.json
 .git
