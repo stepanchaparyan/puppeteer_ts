@@ -43,7 +43,7 @@
     },
     "jsRules": {
         "max-line-length": {
-            "options": [120]
+            "options": [400]
         }
     }
 }

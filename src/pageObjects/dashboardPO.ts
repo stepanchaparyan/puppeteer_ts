@@ -17,14 +17,9 @@ export default class Dashboard {
 	public async pageTitle(): Promise<string> {
 		return this.page.title();
 	}
-	public async fourDivsColorsUI(): Promise<boolean> {
-		await this.page.click(NAVBAR.SELECTORS.DASHBOARD);
-		const options = { x: 330, y: 130, width: 120, height: 250 };
-		const noDiff = await this.utils.compareScreenshotsWithClip('dashboard', 'fourDivColors', options);
-		return noDiff;
-	}
 
 	public async messagesPast7DaysExist(): Promise<boolean> {
+		await this.page.waitForSelector('grdg', {timeout: 60000});
 		await this.page.click(NAVBAR.SELECTORS.DASHBOARD);
 		return (await this.page.$(DASHBOARD.SELECTORS.MESSAGES_PAST_7_DAYS_TEXT_DIV)) !== null;
 	}
@@ -168,13 +163,6 @@ export default class Dashboard {
 		return botsCountIsRight;
 	}
 
-	public async platformStatusDivUI(): Promise<boolean> {
-		await this.page.click(NAVBAR.SELECTORS.DASHBOARD);
-		await this.page.waitFor(1000);
-		const platformStatusDiv = await this.page.$(DASHBOARD.SELECTORS.PLATFORM_STATUS_DIV);
-		const noDiff = await this.utils.compareScreenshots('dashboard', 'platformStatus', platformStatusDiv);
-		return noDiff;
-	}
 	public async platformStatusText(): Promise<string> {
 		await this.page.click(NAVBAR.SELECTORS.DASHBOARD);
 		return this.page.$eval(DASHBOARD.SELECTORS.PLATFORM_STATUS_DIV_TEXT, (text) => text.innerText);
@@ -201,14 +189,6 @@ export default class Dashboard {
 		return url;
 	}
 
-	public async chatBotUI(): Promise<boolean> {
-		await this.page.click(NAVBAR.SELECTORS.DASHBOARD);
-		await this.page.waitFor(4000); // wait for iframe loading
-		const frame = await this.page.frames().find((iframe) => iframe.url() === 'https://app.iox.bot/iox-chatbot/chatwindow');
-		const frameDiv = await frame.$(DASHBOARD.BOT.FULL_BOT);
-		await this.utils.compareScreenshots('dashboard', 'dashboardChatBot', frameDiv);
-		return true;
-	}
 	public async chatBotTitle(): Promise<string> {
 		await this.page.click(NAVBAR.SELECTORS.DASHBOARD);
 		const frame = await this.page.frames().find((iframe) => iframe.url() === 'https://app.iox.bot/iox-chatbot/chatwindow');
@@ -225,16 +205,5 @@ export default class Dashboard {
 		const url = await pages[2].url();
 		return url;
 	}
-	public async chatBotConversation(): Promise<boolean> {
-		await this.page.click(NAVBAR.SELECTORS.DASHBOARD);
-		// wait for iframe loading
-		await this.page.waitFor(2000);
-		const frame = await this.page.frames().find((iframe) => iframe.url() === 'https://app.iox.bot/iox-chatbot/chatwindow');
-		const optionTwo = await frame.$(DASHBOARD.BOT.QUESTION_FIRST_ANSWER_TWO);
-		await optionTwo.click();
-		await this.page.waitFor(2500);
-		const frameDiv = await frame.$(DASHBOARD.BOT.FULL_BOT);
-		await this.utils.compareScreenshots('dashboard', 'dashboardChatBotStepTwo', frameDiv);
-		return true;
-	}
+
 }

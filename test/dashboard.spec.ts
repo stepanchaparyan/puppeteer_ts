@@ -26,9 +26,6 @@ describe('Dashboard page elements', () => {
 		it('page title is Dashboard', async () => {
 			expect(await dashboard.pageTitle()).to.equal('Dashboard');
 		});
-		it('platform status colors', async () => {
-			expect(await dashboard.fourDivsColorsUI()).to.equal(true);
-		});
 	});
 
 	context('Check - Messages Past 7 Days section', () => {
@@ -92,9 +89,6 @@ describe('Dashboard page elements', () => {
 	});
 
 	context('Check - platform Status section ', () => {
-		it('platform status UI', async () => {
-			expect(await dashboard.platformStatusDivUI()).to.equal(true);
-		});
 		it('platform status text', async () => {
 			expect(await dashboard.platformStatusText()).to.equal(' Platform Status');
 		});
@@ -110,17 +104,11 @@ describe('Dashboard page elements', () => {
 	});
 
 	context('Check - ChatBot', () => {
-		it('chatBotUI', async () => {
-			expect(await dashboard.chatBotUI()).to.equal(true);
-		});
 		it('chatBotTitle', async () => {
 			expect(await dashboard.chatBotTitle()).to.equal('Bob');
 		});
 		it('chatBotByIOX_URL', async () => {
 			expect(await dashboard.chatBotByIOX_URL()).to.equal('https://www.ioxchatbot.com/home');
-		});
-		it('chatBotConversation', async () => {
-			expect(await dashboard.chatBotConversation()).to.equal(true);
 		});
 	});
 });

@@ -3,7 +3,7 @@ import * as puppeteer from 'puppeteer';
 const defaultOptions = {
     headless: false,
     //args: ['--start-maximized'],
-    //ignoreHTTPSErrors: false
+    //headless: true, ignoreHTTPSErrors: true
 };
 
 export default async (options = undefined) => {
