@@ -1,7 +1,7 @@
 import { expect } from 'chai';
 import launchPuppeteer from '../launchPuppeteer';
-import Dashboard from '../src/pageObjects/dashboardPO';
-import LoginPage from '../src/pageObjects/loginPagePO';
+import Dashboard from '../src/dashboardSection/dashboardPage';
+import LoginPage from '../src/loginSection/loginPage';
 
 let browser: any;
 let page: any;

@@ -1,18 +1,17 @@
 import * as args from 'minimist';
 import * as CREDS from '../../creds';
-import {LOGIN_PAGE} from '../helpers/constants/loginPageConstants.js';
-import { NAVBAR } from '../helpers/constants/navbarConstants.js';
+import * as ENVIRONMENTS from '../../environments';
+import {LOGIN_PAGE} from './loginPageConstants';
+import { SIDEMENU } from '../sideMenu/sideMenuConstants';
 const argv = args(process.argv.slice(2));
 
 export default class LoginPage {
 	private page: any;
-	private QA: any = 'https://qa-app.iox.bot';
-	private PROD: any = 'https://app.iox.bot';
 	private environment: any;
 
 	constructor(page) {
 		this.page = page;
-		this.environment = argv._[1] === 'QA' ? this.QA : this.PROD;
+		this.environment = argv._[1] === 'QA' ? ENVIRONMENTS.QA : ENVIRONMENTS.PROD;
 	}
 	public async open() {
 			return this.page.goto(`${this.environment}`);
@@ -25,9 +24,9 @@ export default class LoginPage {
 			await this.page.waitFor(500);
 	}
 	public async logOut() {
-		await this.page.waitForSelector(NAVBAR.SELECTORS.DROPDOWN);
-		await this.page.click(NAVBAR.SELECTORS.DROPDOWN);
-		await this.page.waitForSelector(NAVBAR.SELECTORS.LOGOUT);
-		await this.page.click(NAVBAR.SELECTORS.LOGOUT);
+		await this.page.waitForSelector(SIDEMENU.SELECTORS.DROPDOWN);
+		await this.page.click(SIDEMENU.SELECTORS.DROPDOWN);
+		await this.page.waitForSelector(SIDEMENU.SELECTORS.LOGOUT);
+		await this.page.click(SIDEMENU.SELECTORS.LOGOUT);
 	}
 }

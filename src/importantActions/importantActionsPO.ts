@@ -1,5 +1,5 @@
-import { BOT_SECTION } from '../helpers/constants/botsSectionConstants.js';
-import { NAVBAR } from '../helpers/constants/navbarConstants.js';
+import { BOT_SECTION } from '../botSection/botsSectionConstants';
+import { SIDEMENU } from '../sideMenu/sideMenuConstants';
 import Utils from '../helpers/utils';
 
 export default class FlowBot {
@@ -12,7 +12,7 @@ export default class FlowBot {
 	}
 
 	public async createBotByImportantActionDoc(): Promise<boolean> {
-		await this.page.click(NAVBAR.SELECTORS.BOTS);
+		await this.page.click(SIDEMENU.SELECTORS.BOTS);
 		await this.utils.clickOnCreateBotButton();
 		await this.page.waitFor(800);
 		await this.page.click(BOT_SECTION.SELECTORS.CREATE_FLOW_BOT);

@@ -1,25 +1,22 @@
 import { expect } from 'chai';
 import launchPuppeteer from '../launchPuppeteer';
-import BotSection from '../src/pageObjects/botSectionPO';
-import LoginPage from '../src/pageObjects/loginPagePO';
-import Utils from '../src/helpers/utils';
+import BotSection from '../src/botSection/botSectionPage';
+import LoginPage from '../src/loginSection/loginPage';
 
 let browser;
 let page;
 let loginPage;
 let botSection;
-let utils;
 
 const viewport = { width: 920, height: 1080 };
 
-describe.only('Bot section', () => {
+describe('Bot section', () => {
 	before(async () => {
 		browser = await launchPuppeteer();
 		page = await browser.newPage();
 		await page.setViewport(viewport);
 		botSection = new BotSection(page);
 		loginPage = new LoginPage(page);
-		utils = new Utils(page);
 		await loginPage.open();
 		await loginPage.logIn();
 	});
@@ -39,37 +36,8 @@ describe.only('Bot section', () => {
 	context('Open Dashboard page', () => {
 		it('C284 - Check the Dashboard page opens after Login', async () => {
 			expect(await botSection.getDefaultSectionTitle()).to.equal('Dashboard');
-			expect(await botSection.getDefaultSectionURL()).to.equal('bot');
+			expect(await botSection.getDefaultSectionURL()).to.equal('dashboard');
 			expect(await botSection.checkDashboardSectionIsActive()).to.equal(true);
-		});
-	});
-
-	context('Menu panel', () => {
-		it('C426 - Check the Left side Menu panel styles state - Bots', async () => {
-			expect(await botSection.getBotSectionTitle()).to.equal('Bots');
-			expect(await botSection.getBotSectionURL()).to.equal('bots');
-			expect(await botSection.getBotSectionIconText()).to.equal('Bots\n');
-		});
-		it('C426 - Check the Left side Menu panel styles state - Dashboard', async () => {
-			expect(await botSection.getDashboardSectionTitle()).to.equal('Dashboard');
-			expect(await botSection.getDashboardSectionURL()).to.equal('dashboard');
-			expect(await botSection.getDashboardSectionIconText()).to.equal('Dashboard\n');
-		});
-		it('C426 - Check the Left side Menu panel styles state - Knowledge', async () => {
-			expect(await botSection.getKnowledgeSectionTitle()).not.to.equal('Knowledge');
-			expect(await botSection.getKnowledgeSectionURL()).not.to.equal('knowledge');
-			expect(await botSection.getKnowledgeSectionIconText()).to.equal('Knowledge\n');
-			expect(await botSection.knowledgeSectionIsDisbled()).to.equal(true);
-		});
-		it('C426 - Check the Left side Menu panel styles state - API Connector', async () => {
-			expect(await botSection.getApiConnectorSectionTitle()).to.equal('Api Connector');
-			expect(await botSection.getApiConnectorSectionURL()).to.equal('connector');
-			expect(await botSection.getApiConnectorSectionIconText()).to.equal('API Connector\n');
-		});
-		it('C426 - Check the Left side Menu panel styles state - Help', async () => {
-			expect(await botSection.getHelpSectionTitle()).to.equal('Help');
-			expect(await botSection.getHelpSectionURL()).to.equal('help');
-			expect(await botSection.getHelpSectionIconText()).to.equal('Help\n');
 		});
 	});
 
@@ -83,16 +51,16 @@ describe.only('Bot section', () => {
 		it('C6163 - Check the "Delete Flow Bot" (not trained) functionality (notification)', async () => {
 			expect(await botSection.deleteNotTrainedFlowBotNotification()).to.include('Successfully removed bot');
 		});
-		it.skip('C6164 - Check the `Delete Flow Bot` (trained) buttonDisabled functionality', async () => {
+		it('C6164 - Check the `Delete Flow Bot` (trained) buttonDisabled functionality', async () => {
 			expect(await botSection.deleteTrainedFlowBotButtonDisabled()).to.equal(true);
 		});
-		it.skip('C6164 - Check the `Delete Flow Bot` (trained) cancel functionality', async () => {
+		it('C6164 - Check the `Delete Flow Bot` (trained) cancel functionality', async () => {
 			expect(await botSection.deleteTrainedFlowBotCancel()).to.equal(true);
 		});
-		it.skip('C6164 - Check the `Delete Flow Bot` (trained) delete functionality', async () => {
+		it('C6164 - Check the `Delete Flow Bot` (trained) delete functionality', async () => {
 			expect(await botSection.deleteTrainedFlowBot()).to.equal(true);
 		});
-		it.skip('C6164 - Check the `Delete Flow Bot` (trained) notification', async () => {
+		it('C6164 - Check the `Delete Flow Bot` (trained) notification', async () => {
 			expect(await botSection.deleteTrainedFlowBotNotification()).to.include('Successfully removed bot');
 		});
 	});

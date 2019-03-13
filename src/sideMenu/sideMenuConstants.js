@@ -1,5 +1,5 @@
 module.exports = {
-    NAVBAR: {
+    SIDEMENU: {
         SELECTORS: {
             MENUBAR: 'body > app-root > div > iox-side-menu > div > div.site-menubar-body',
             DASHBOARD: 'body > app-root > div > iox-side-menu > div > div.site-menubar-body > ul > li:nth-child(1)',

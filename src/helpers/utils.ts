@@ -1,7 +1,7 @@
 import * as path from 'path';
 import * as ScreenshotTester from 'puppeteer-screenshot-tester';
-import { BOT_SECTION } from './constants/botsSectionConstants.js';
-import { NAVBAR } from './constants/navbarConstants.js';
+import { BOT_SECTION } from '../botSection/botsSectionConstants';
+import { SIDEMENU } from '../sideMenu/sideMenuConstants';
 
 export default class Utils {
 	private page: any;
@@ -79,8 +79,8 @@ export default class Utils {
 	}
 
 	public async deleteBot(botName: string): Promise<boolean> {
-		await this.page.waitForSelector(NAVBAR.SELECTORS.BOTS);
-		await this.page.click(NAVBAR.SELECTORS.BOTS);
+		await this.page.waitForSelector(SIDEMENU.SELECTORS.BOTS);
+		await this.page.click(SIDEMENU.SELECTORS.BOTS);
 		await this.clickOnBotDeleteButton(botName);
 		await this.page.waitForSelector(BOT_SECTION.SELECTORS.YES_BUTTON_ON_DELETE);
 		await this.page.click(BOT_SECTION.SELECTORS.YES_BUTTON_ON_DELETE);
@@ -88,7 +88,7 @@ export default class Utils {
 	}
 
 	public async deleteTrainedBot(botName: string): Promise<void> {
-		await this.page.click(NAVBAR.SELECTORS.BOTS);
+		await this.page.click(SIDEMENU.SELECTORS.BOTS);
 		await this.clickOnBotDeleteButton(botName);
 		await this.page.waitForSelector(BOT_SECTION.SELECTORS.DELETE_TRAINED_BOT_INPUT);
 		await this.page.type(BOT_SECTION.SELECTORS.DELETE_TRAINED_BOT_INPUT, 'delete');
@@ -135,8 +135,8 @@ export default class Utils {
 	}
 
 	public async createFlowBot(botName: string): Promise<void> {
-		await this.page.waitForSelector(NAVBAR.SELECTORS.BOTS);
-		await this.page.click(NAVBAR.SELECTORS.BOTS);
+		await this.page.waitForSelector(SIDEMENU.SELECTORS.BOTS);
+		await this.page.click(SIDEMENU.SELECTORS.BOTS);
 		await this.clickOnCreateBotButton();
 		await this.page.waitForSelector(BOT_SECTION.SELECTORS.CREATE_FLOW_BOT);
 		await this.page.click(BOT_SECTION.SELECTORS.CREATE_FLOW_BOT);
@@ -149,8 +149,8 @@ export default class Utils {
 	}
 
 	public async createNLPBot(botName: string): Promise<void> {
-		await this.page.waitForSelector(NAVBAR.SELECTORS.BOTS);
-		await this.page.click(NAVBAR.SELECTORS.BOTS);
+		await this.page.waitForSelector(SIDEMENU.SELECTORS.BOTS);
+		await this.page.click(SIDEMENU.SELECTORS.BOTS);
 		await this.clickOnCreateBotButton();
 		await this.page.waitForSelector(BOT_SECTION.SELECTORS.CREATE_NLP_BOT);
 		await this.page.click(BOT_SECTION.SELECTORS.CREATE_NLP_BOT);
@@ -158,5 +158,10 @@ export default class Utils {
 		await this.page.type(BOT_SECTION.SELECTORS.BOT_NAME_INPUT, botName);
 		await this.page.click(BOT_SECTION.SELECTORS.CREATE_BOT_BUTTON_AFTER_TYPE_NAME);
 		await this.page.waitFor(1000); //!
+	}
+
+	public async click(selector: string): Promise<void> {
+		await this.page.waitForSelector(selector);
+		await this.page.click(selector);
 	}
 }
