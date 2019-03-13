@@ -236,6 +236,12 @@ export default class FlowBot {
 		// await this.page.click(BOT_SECTION.SELECTORS.TRAIN);
 		// await this.page.waitFor(200000); // 2 minutes
 
+		// context('deleteBot', () => {
+		// 	it('delete testBot', async () => {
+		// 		expect(await botSection.deleteBot('testBotIA')).to.equal(true);
+		// 	});
+		// });
+
 		return true;
 	}
 

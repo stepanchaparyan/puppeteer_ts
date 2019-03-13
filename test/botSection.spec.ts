@@ -27,14 +27,12 @@ describe.only('Bot section', () => {
 		await browser.close();
 	});
 
-	context.skip('Create Flow Bot', () => {
+	context('Create Flow Bot', () => {
 		it('C69 - Check the "Create Bot" functionality', async () => {
 			expect(await botSection.createBots()).to.equal(true);
-			//expect(await utils.deleteBot('C69', 3)).to.equal(true);
 		});
 		it('C282 - Check that when user creates more than 10 bots the website works as it was', async () => {
 			expect(await botSection.createBotsAndCheckCount()).to.equal(true);
-			//expect(await utils.deleteBot('testBotForC282', 10)).to.equal(true);
 		});
 	});
 
@@ -85,21 +83,21 @@ describe.only('Bot section', () => {
 		it('C6163 - Check the "Delete Flow Bot" (not trained) functionality (notification)', async () => {
 			expect(await botSection.deleteNotTrainedFlowBotNotification()).to.include('Successfully removed bot');
 		});
-		it('C6164 - Check the `Delete Flow Bot` (trained) buttonDisabled functionality', async () => {
+		it.skip('C6164 - Check the `Delete Flow Bot` (trained) buttonDisabled functionality', async () => {
 			expect(await botSection.deleteTrainedFlowBotButtonDisabled()).to.equal(true);
 		});
-		it('C6164 - Check the `Delete Flow Bot` (trained) cancel functionality', async () => {
+		it.skip('C6164 - Check the `Delete Flow Bot` (trained) cancel functionality', async () => {
 			expect(await botSection.deleteTrainedFlowBotCancel()).to.equal(true);
 		});
-		it('C6164 - Check the `Delete Flow Bot` (trained) delete functionality', async () => {
+		it.skip('C6164 - Check the `Delete Flow Bot` (trained) delete functionality', async () => {
 			expect(await botSection.deleteTrainedFlowBot()).to.equal(true);
 		});
-		it('C6164 - Check the `Delete Flow Bot` (trained) notification', async () => {
+		it.skip('C6164 - Check the `Delete Flow Bot` (trained) notification', async () => {
 			expect(await botSection.deleteTrainedFlowBotNotification()).to.include('Successfully removed bot');
 		});
 	});
 
-	context.only('Delete NLP Bot', function() {
+	context('Delete NLP Bot', function() {
 		it('C6165 - Check the "Delete NLP Bot" (not trained) functionality', async () => {
 			expect(await botSection.deleteNotTrainedNLPBot()).to.equal(true);
 		});
@@ -123,9 +121,4 @@ describe.only('Bot section', () => {
 		});
 	});
 
-	// context('deleteBot', () => {
-	// 	it('delete testBot', async () => {
-	// 		expect(await botSection.deleteBot('testBotIA')).to.equal(true);
-	// 	});
-	// });
 });

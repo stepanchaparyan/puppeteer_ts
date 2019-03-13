@@ -78,12 +78,13 @@ export default class Utils {
 		return botIsExist;
 	}
 
-	public async deleteBot(botName: string): Promise<void> {
+	public async deleteBot(botName: string): Promise<boolean> {
 		await this.page.waitForSelector(NAVBAR.SELECTORS.BOTS);
 		await this.page.click(NAVBAR.SELECTORS.BOTS);
 		await this.clickOnBotDeleteButton(botName);
 		await this.page.waitForSelector(BOT_SECTION.SELECTORS.YES_BUTTON_ON_DELETE);
 		await this.page.click(BOT_SECTION.SELECTORS.YES_BUTTON_ON_DELETE);
+		return true;
 	}
 
 	public async deleteTrainedBot(botName: string): Promise<void> {
@@ -92,19 +93,20 @@ export default class Utils {
 		await this.page.waitForSelector(BOT_SECTION.SELECTORS.DELETE_TRAINED_BOT_INPUT);
 		await this.page.type(BOT_SECTION.SELECTORS.DELETE_TRAINED_BOT_INPUT, 'delete');
 		await this.page.waitForSelector(BOT_SECTION.SELECTORS.DELETE_TRAINED_BOT_DELETE_BUTTON);
-		await this.page.click(BOT_SECTION.SELECTORS.DELETE_TRAINED_BOT_DELETE_BUTTON);
+		await this.page.click(BOT_SECTION.SELECTORS.DELETE_TRAINED_BOT_DELETE_BUTTON, { delay: 50 });
 	}
 
 	public async integrateBotToGoogle(): Promise<void> {
 		await this.page.waitForSelector(BOT_SECTION.SELECTORS.INTEGRATE);
 		await this.page.click(BOT_SECTION.SELECTORS.INTEGRATE);
 		await this.page.waitForSelector(BOT_SECTION.SELECTORS.CHECHBOX_GOOGLE_HOME);
-		await this.page.click(BOT_SECTION.SELECTORS.CHECHBOX_GOOGLE_HOME);
+		await this.page.click(BOT_SECTION.SELECTORS.CHECHBOX_GOOGLE_HOME, { delay: 50 });
 		await this.page.waitForSelector(BOT_SECTION.SELECTORS.GOOGLE_HOME_INPUT_1);
 		await this.page.type(BOT_SECTION.SELECTORS.GOOGLE_HOME_INPUT_1, 'newagent-4dfa0');
 		await this.page.type(BOT_SECTION.SELECTORS.GOOGLE_HOME_INPUT_2, '237d84ca4fc8457c8b3cf8c4c348476b');
 		await this.page.waitForSelector(BOT_SECTION.SELECTORS.INTEGRATE_BUTTON);
 		await this.page.click(BOT_SECTION.SELECTORS.INTEGRATE_BUTTON);
+		await this.page.waitFor(2000); //! need open bug
 	}
 
 	public async trainBot(): Promise<void> {

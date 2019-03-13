@@ -21,17 +21,28 @@ export default class BotSection {
 			// Location Question
 			await this.page.waitForSelector(BOT_SECTION.SELECTORS.ADD_SUB_DIALOG, { visible: true });
 			await this.page.click(BOT_SECTION.SELECTORS.ADD_SUB_DIALOG);
+			await this.page.waitForSelector(BOT_SECTION.SELECTORS.ENTER_QUESTION_INPUT);
 			await this.page.type(BOT_SECTION.SELECTORS.ENTER_QUESTION_INPUT, 'Where are you from?');
+			await this.page.waitForSelector(BOT_SECTION.SELECTORS.ADD_ON);
 			await this.page.click(BOT_SECTION.SELECTORS.ADD_ON);
 			await this.page.waitForSelector(BOT_SECTION.SELECTORS.CHOOSE_QUESTION_TYPE, { visible: true });
 			await this.page.select(BOT_SECTION.SELECTORS.CHOOSE_QUESTION_TYPE, 'Location picker');
+			await this.page.waitForSelector(BOT_SECTION.SELECTORS.QUESTION_SAVE_BUTTON);
 			await this.page.click(BOT_SECTION.SELECTORS.QUESTION_SAVE_BUTTON);
 			await this.page.waitForSelector(BOT_SECTION.SELECTORS.QUESTION_SAVE_BUTTON, { hidden: true });
 		}
+		await this.utils.deleteBot('C69');
+		await this.utils.reload();
+		await this.utils.deleteBot('C69');
+		await this.utils.reload();
+		await this.utils.deleteBot('C69');
+		await this.utils.reload();
 		return true;
 	}
 	public async createBotsAndCheckCount(): Promise<boolean> {
+		await this.page.waitForSelector(NAVBAR.SELECTORS.DASHBOARD);
 		await this.page.click(NAVBAR.SELECTORS.DASHBOARD);
+		await this.page.waitForSelector(DASHBOARD.SELECTORS.BOTS_COUNT_TEXT, { visible: true });
 		let botsCountText = await this.page.$eval(DASHBOARD.SELECTORS.BOTS_COUNT_TEXT, (text) => text.innerText);
 		const botsCountBefore = botsCountText.substr(0, 2);
 		for (let i = 0; i < 10; i++) {
@@ -43,10 +54,15 @@ export default class BotSection {
 		botsCountText = await this.page.$eval(DASHBOARD.SELECTORS.BOTS_COUNT_TEXT, (text) => text.innerText);
 		const botsCountAfter = botsCountText.substr(0, 2);
 		const botsCountIsRight = Number(botsCountBefore) + 10 === Number(botsCountAfter) ? true : false;
+		for (let i = 0; i < 10; i++) {
+			await this.utils.deleteBot('testBotForC282');
+			await this.utils.reload();
+		}
 		return botsCountIsRight;
 	}
 
 	public async getDefaultSectionTitle(): Promise<string> {
+		await this.utils.reload();
 		await this.loginPage.logOut();
 		await this.loginPage.logIn();
 		return this.page.title();
@@ -264,7 +280,6 @@ export default class BotSection {
 	public async deleteTrainedNLPBotButtonDisabled(): Promise<boolean> {
 		await this.utils.createNLPBot('C6166');
 		await this.utils.integrateBotToGoogle();
-		await this.page.waitFor(1000); //!
 		await this.utils.trainBot();
 		// type wrong word (not 'delete') and verify that button is remain disabled
 		await this.page.waitFor(NAVBAR.SELECTORS.BOTS);
@@ -301,11 +316,11 @@ export default class BotSection {
 	public async deleteTrainedNLPBotNotification(): Promise<boolean> {
 		await this.utils.createNLPBot('C6166');
 		await this.utils.integrateBotToGoogle();
-		await this.page.waitFor(1000); //!
 		await this.utils.trainBot();
 		await this.utils.deleteTrainedBot('C6166');
 		await this.page.waitForSelector(BOT_SECTION.SELECTORS.DELETE_BOT_NOTIFICATION);
 		const text = await this.page.$eval(BOT_SECTION.SELECTORS.DELETE_BOT_NOTIFICATION, (text) => text.innerText);
+		await this.page.reload();
 		return text;
 	}
 }
