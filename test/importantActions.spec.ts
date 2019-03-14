@@ -9,7 +9,7 @@ let loginPage;
 let flowBot;
 const viewport = { width: 1020, height: 1080 };
 
-describe('Important Actions', () => {
+describe.only('Important Actions', () => {
 	before(async () => {
 		browser = await launchPuppeteer();
 		page = await browser.newPage();

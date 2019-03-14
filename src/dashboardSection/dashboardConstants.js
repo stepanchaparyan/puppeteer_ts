@@ -19,7 +19,8 @@ module.exports = {
             PLATFORM_STATUS_DIV_TEXT: 'body > app-root > div > iox-page-container > div > iox-dashboard > div > div.col-lg-7.col-md-7.col-sm-12.col-xs-12.dashboard-column-left > div.col-lg-12.col-md-12.col-sm-12.col-xs-12 > div > div.platform-status-title.dashboard-item-cornered',
             PLATFORMS_LIST: 'body > app-root > div > iox-page-container > div > iox-dashboard > div > div.col-lg-7.col-md-7.col-sm-12.col-xs-12.dashboard-column-left > div.col-lg-12.col-md-12.col-sm-12.col-xs-12 > div > div.platform-status-fields.dashboard-item-cornered > div',
             HAVING_TROUBLES: 'body > app-root > div > iox-page-container > div > iox-dashboard > div > div.col-lg-7.col-md-7.col-sm-12.col-xs-12.dashboard-column-left > div.col-lg-12.col-md-12.col-sm-12.col-xs-12 > div > div.platform-status-contact',
-            CONTACT_US: 'body > app-root > div > iox-page-container > div > iox-dashboard > div > div.col-lg-7.col-md-7.col-sm-12.col-xs-12.dashboard-column-left > div.col-lg-12.col-md-12.col-sm-12.col-xs-12 > div > div.platform-status-contact > a'
+            CONTACT_US: 'body > app-root > div > iox-page-container > div > iox-dashboard > div > div.col-lg-7.col-md-7.col-sm-12.col-xs-12.dashboard-column-left > div.col-lg-12.col-md-12.col-sm-12.col-xs-12 > div > div.platform-status-contact > a',
+            ONE_DIV_FROM_LINKED_PAGE: '#root > div > div > div.sc-iujRgT.iDFEBX > main > div.sc-hgHYgh.bnwXKX.sc-bMvGRv.fJKHca > form > input'
         },
         BOT: {
             FULL_BOT: 'body > app-root > div',

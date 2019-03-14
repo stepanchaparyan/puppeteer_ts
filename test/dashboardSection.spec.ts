@@ -2,11 +2,13 @@ import { expect } from 'chai';
 import launchPuppeteer from '../launchPuppeteer';
 import Dashboard from '../src/dashboardSection/dashboardPage';
 import LoginPage from '../src/loginSection/loginPage';
+import Utils from '../src/helpers/utils';
 
 let browser: any;
 let page: any;
 let loginPage: any;
 let dashboard: any;
+let utils: any;
 const viewport: any = { width: 1020, height: 1080 };
 
 describe('Dashboard page elements', () => {
@@ -16,6 +18,7 @@ describe('Dashboard page elements', () => {
 		await page.setViewport(viewport);
 		dashboard = new Dashboard(page, browser);
 		loginPage = new LoginPage(page);
+		utils = new Utils(page);
 		await loginPage.open();
 		await loginPage.logIn();
 	});
@@ -34,6 +37,9 @@ describe('Dashboard page elements', () => {
 		});
 		it('messages past 7 days div - messages', async () => {
 			expect(await dashboard.messagesPast7DaysMessages()).to.equal('MESSAGES');
+		});
+		it('accept Agreememnt', async () => {
+			expect(await utils.acceptChatBotAgreement()).to.equal(true);
 		});
 		it('messages past 7 days div - number', async function() {
 			this.retries(5);

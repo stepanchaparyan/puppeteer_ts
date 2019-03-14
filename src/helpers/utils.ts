@@ -2,6 +2,8 @@ import * as path from 'path';
 import * as ScreenshotTester from 'puppeteer-screenshot-tester';
 import { BOT_SECTION } from '../botSection/botsSectionConstants';
 import { SIDEMENU } from '../sideMenu/sideMenuConstants';
+import { IFRAME } from '../botSection/iframeConstants';
+import { DASHBOARD } from '../dashboardSection/dashboardConstants';
 
 export default class Utils {
 	private page: any;
@@ -163,5 +165,33 @@ export default class Utils {
 	public async click(selector: string): Promise<void> {
 		await this.page.waitForSelector(selector);
 		await this.page.click(selector);
+	}
+	public async type(selector: string, inputText: string): Promise<void> {
+		await this.page.waitForSelector(selector);
+		await this.page.type(selector, inputText);
+	}
+	public async select(selector: string, inputText: string): Promise<void> {
+		await this.page.waitForSelector(selector);
+		await this.page.select(selector, inputText);
+	}
+
+	public async acceptChatBotAgreement(): Promise<boolean> {
+		//await this.page.waitFor(1000);
+		await this.click(SIDEMENU.SELECTORS.BOTS);
+		const botNumber = await this.getCorrespondingBotNumber('clickOnGoogle');
+		await this.click(`body > app-root > div > iox-page-container > div > iox-bots > div > div:nth-child(${botNumber}) > iox-bot-item > div > div.img-container > img`);
+		await this.click(BOT_SECTION.SELECTORS.RUN);
+		// wait for iframe loading
+		await this.page.waitFor(3000);
+		const frame = await this.page.frames().find((iframe) => iframe.name() === 'responsiveFrame');
+		const mainButton = await frame.$(IFRAME.SELECTORS.MAIN_BUTTON);
+		await mainButton.click();
+		await this.page.waitFor(1000);
+		const agreementCheckbox = await frame.$(IFRAME.SELECTORS.AGREEMENT_CHECKBOX);
+		await agreementCheckbox.click();
+		const agreementConfirmButton = await frame.$(IFRAME.SELECTORS.AGREEMENT_CONFIRM_BUTTON);
+		await agreementConfirmButton.click();
+		//await this.page.waitFor(2000);
+		return true;
 	}
 }
