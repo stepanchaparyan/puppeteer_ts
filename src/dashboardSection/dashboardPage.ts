@@ -35,18 +35,14 @@ export default class Dashboard {
 		await this.utils.click(SIDEMENU.SELECTORS.DASHBOARD);
 		await this.page.waitForSelector(DASHBOARD.SELECTORS.MESSAGES_PAST_7_DAYS_NUMBER);
 		const messagesCountBefore = await this.page.$eval(DASHBOARD.SELECTORS.MESSAGES_PAST_7_DAYS_NUMBER, (text) => text.innerText);
-		await this.utils.click(SIDEMENU.SELECTORS.BOTS);
-		const botNumber = await this.utils.getCorrespondingBotNumber('clickOnGoogle');
-		await this.utils.click(`body > app-root > div > iox-page-container > div > iox-bots > div > div:nth-child(${botNumber}) > iox-bot-item > div > div.img-container > img`);
-		await this.utils.click(BOT_SECTION.SELECTORS.RUN);
-		// wait for iframe loading
-		await this.page.waitFor(3000);
+		await this.utils.goToRUNPageOfBot('clickOnGoogle');		
+		// wait for iframe loading		
+		await this.page.waitFor(2000);
 		const frame = await this.page.frames().find((iframe) => iframe.name() === 'responsiveFrame');
-		const mainButton = await frame.$(IFRAME.SELECTORS.MAIN_BUTTON);
-		await mainButton.click();
-		await this.page.waitFor(1000);
-		const googleButton = await frame.$(IFRAME.SELECTORS.GOOGLE);
-		await googleButton.click();
+		await this.page.goto(frame.url());
+		await this.utils.click(IFRAME.SELECTORS.MAIN_BUTTON);
+		await this.utils.click(IFRAME.SELECTORS.GOOGLE);
+		await this.page.goBack();
 		await this.utils.click(SIDEMENU.SELECTORS.DASHBOARD);
 		await this.page.waitFor(1000);
 		const messagesCountAfter = await this.page.$eval(DASHBOARD.SELECTORS.MESSAGES_PAST_7_DAYS_NUMBER, (text) => text.innerText);
@@ -72,18 +68,14 @@ export default class Dashboard {
 		await this.utils.click(SIDEMENU.SELECTORS.DASHBOARD);
 		await this.page.waitForSelector(DASHBOARD.SELECTORS.MESSAGES_PAST_30_DAYS_NUMBER);
 		const messagesCountBefore = await this.page.$eval(DASHBOARD.SELECTORS.MESSAGES_PAST_30_DAYS_NUMBER, (text) => text.innerText);
-		await this.utils.click(SIDEMENU.SELECTORS.BOTS);
-		const botNumber = await this.utils.getCorrespondingBotNumber('clickOnGoogle');
-		await this.page.click(`body > app-root > div > iox-page-container > div > iox-bots > div > div:nth-child(${botNumber}) > iox-bot-item > div > div.img-container > img`);
-		await this.utils.click(BOT_SECTION.SELECTORS.RUN);
+		await this.utils.goToRUNPageOfBot('clickOnGoogle');		
 		// wait for iframe loading
-		await this.page.waitFor(3000);
-		const frame = await this.page.frames().find((iframe) => iframe.name() === 'responsiveFrame');
-		const mainButton = await frame.$(IFRAME.SELECTORS.MAIN_BUTTON);
-		await mainButton.click();
 		await this.page.waitFor(2000);
-		const googleButton = await frame.$(IFRAME.SELECTORS.GOOGLE);
-		await googleButton.click();
+		const frame = await this.page.frames().find((iframe) => iframe.name() === 'responsiveFrame');
+		await this.page.goto(frame.url());
+		await this.utils.click(IFRAME.SELECTORS.MAIN_BUTTON);
+		await this.utils.click(IFRAME.SELECTORS.GOOGLE);
+		await this.page.goBack();		
 		await this.utils.click(SIDEMENU.SELECTORS.DASHBOARD);
 		await this.page.waitFor(1000);
 		const messagesCountAfter = await this.page.$eval(DASHBOARD.SELECTORS.MESSAGES_PAST_30_DAYS_NUMBER, (text) => text.innerText);
@@ -109,19 +101,14 @@ export default class Dashboard {
 		await this.utils.click(SIDEMENU.SELECTORS.DASHBOARD);
 		await this.page.waitForSelector(DASHBOARD.SELECTORS.SESSIONS_PAST_30_DAYS_NUMBER);
 		const messagesCountBefore = await this.page.$eval(DASHBOARD.SELECTORS.SESSIONS_PAST_30_DAYS_NUMBER, (text) => text.innerText);
-		await this.utils.click(SIDEMENU.SELECTORS.BOTS);
-		const botNumber = await this.utils.getCorrespondingBotNumber('clickOnGoogle');
-		await this.page.waitForSelector(`body > app-root > div > iox-page-container > div > iox-bots > div > div:nth-child(${botNumber}) > iox-bot-item > div > div.img-container > img`);
-		await this.page.click(`body > app-root > div > iox-page-container > div > iox-bots > div > div:nth-child(${botNumber}) > iox-bot-item > div > div.img-container > img`);
-		await this.utils.click(BOT_SECTION.SELECTORS.RUN);
+		await this.utils.goToRUNPageOfBot('clickOnGoogle');		
 		// wait for iframe loading
-		await this.page.waitFor(3000);
-		const frame = await this.page.frames().find((iframe) => iframe.name() === 'responsiveFrame');
-		const mainButton = await frame.$(IFRAME.SELECTORS.MAIN_BUTTON);
-		await mainButton.click();
 		await this.page.waitFor(2000);
-		const googleButton = await frame.$(IFRAME.SELECTORS.GOOGLE);
-		await googleButton.click();
+		const frame = await this.page.frames().find((iframe) => iframe.name() === 'responsiveFrame');
+		await this.page.goto(frame.url());
+		await this.utils.click(IFRAME.SELECTORS.MAIN_BUTTON);
+		await this.utils.click(IFRAME.SELECTORS.GOOGLE);
+		await this.page.goBack();
 		await this.utils.click(SIDEMENU.SELECTORS.DASHBOARD);
 		await this.page.waitFor(1000);
 		const messagesCountAfter = await this.page.$eval(DASHBOARD.SELECTORS.SESSIONS_PAST_30_DAYS_NUMBER, (text) => text.innerText);
@@ -141,7 +128,7 @@ export default class Dashboard {
 	}
 	public async botsCount(): Promise<boolean> {
 		await this.utils.click(SIDEMENU.SELECTORS.DASHBOARD);
-		await this.page.waitForSelector(DASHBOARD.SELECTORS.BOTS_COUNT_TEXT); //! 
+		await this.page.waitForSelector(DASHBOARD.SELECTORS.BOTS_COUNT_TEXT); 
 		const botsCountText = await this.page.$eval(DASHBOARD.SELECTORS.BOTS_COUNT_TEXT, (text) => text.innerText);
 		const botsCount = botsCountText.substr(0, 2);
 		await this.utils.click(SIDEMENU.SELECTORS.BOTS);
@@ -187,7 +174,7 @@ export default class Dashboard {
 		const frame = await this.page.frames().find((iframe) => iframe.url() === 'https://app.iox.bot/iox-chatbot/chatwindow');
 		const byIOXButton = await frame.$(DASHBOARD.BOT.BYIOX_LINK);
 		await byIOXButton.click();
-		await this.page.waitFor(1000); //!
+		await this.page.waitFor(1500); //!
 		const pages = await this.browser.pages();
 		await pages[2].waitForSelector('#tmp_button-91792');
 		const url = await pages[2].url();

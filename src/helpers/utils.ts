@@ -74,9 +74,7 @@ export default class Utils {
 		await this.reload();
 		const botNumber = await this.getCorrespondingBotNumber(botName);
 		const botIsExist =
-			(await this.page.$(
-				`body > app-root > div > iox-page-container > div > iox-bots > div > div:nth-child(${botNumber}) > iox-bot-item > div > div.bot-content > div.action-buttons.btn-group > button:nth-child(3) > i`
-			)) !== null;
+			(await this.page.$(`body > app-root > div > iox-page-container > div > iox-bots > div > div:nth-child(${botNumber}) > iox-bot-item > div > div.bot-content > div.action-buttons.btn-group > button:nth-child(3) > i`)) !== null;
 		return botIsExist;
 	}
 
@@ -120,7 +118,7 @@ export default class Utils {
 	}
 
 	public async reload(): Promise<void> {
-		await this.page.reload( { waitUntil: 'load' } );
+		await this.page.reload({ waitUntil: 'load' });
 		await this.page.waitFor(500); //!
 	}
 
@@ -128,12 +126,8 @@ export default class Utils {
 		await this.page.waitFor(500); //!
 		await this.reload();
 		const botsCount = await this.page.$$eval(BOT_SECTION.SELECTORS.ALL_BOTS, (bots) => bots.length);
-		await this.page.waitForSelector(
-			`body > app-root > div > iox-page-container > div > iox-bots > div > div:nth-child(${botsCount}) > button`
-		);
-		await this.page.click(
-			`body > app-root > div > iox-page-container > div > iox-bots > div > div:nth-child(${botsCount}) > button`
-		);
+		await this.page.waitForSelector(`body > app-root > div > iox-page-container > div > iox-bots > div > div:nth-child(${botsCount}) > button`);
+		await this.page.click(`body > app-root > div > iox-page-container > div > iox-bots > div > div:nth-child(${botsCount}) > button`);
 	}
 
 	public async createFlowBot(botName: string): Promise<void> {
@@ -193,5 +187,11 @@ export default class Utils {
 		await agreementConfirmButton.click();
 		//await this.page.waitFor(2000);
 		return true;
+	}
+	public async goToRUNPageOfBot(botName: string): Promise<void> {
+		await this.click(SIDEMENU.SELECTORS.BOTS);
+		const botNumber = await this.getCorrespondingBotNumber(botName);
+		await this.click(`body > app-root > div > iox-page-container > div > iox-bots > div > div:nth-child(${botNumber}) > iox-bot-item > div > div.img-container > img`);
+		await this.click(BOT_SECTION.SELECTORS.RUN);
 	}
 }
