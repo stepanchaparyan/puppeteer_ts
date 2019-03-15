@@ -3,7 +3,6 @@ import * as CREDS from '../../creds';
 import * as ENVIRONMENTS from '../../environments';
 import { LOGIN_PAGE } from './loginPageConstants';
 import { SIDEMENU } from '../sideMenu/sideMenuConstants';
-import { DASHBOARD } from '../dashboardSection/dashboardConstants';
 
 const argv = args(process.argv.slice(2));
 
@@ -16,14 +15,14 @@ export default class LoginPage {
 		this.environment = argv._[1] === 'QA' ? ENVIRONMENTS.QA : ENVIRONMENTS.PROD;
 	}
 	public async open() {
-			return this.page.goto(`${this.environment}`);
+		return this.page.goto(`${this.environment}`);
 	}
 	public async logIn() {
-			await this.page.waitForSelector(LOGIN_PAGE.SELECTORS.EMAIL);
-			await this.page.type(LOGIN_PAGE.SELECTORS.EMAIL, CREDS.usernameS);
-			await this.page.type(LOGIN_PAGE.SELECTORS.PASSWORD, CREDS.passwordS);
-			await this.page.click(LOGIN_PAGE.SELECTORS.LOGIN_BUTTON);
-			await this.page.waitFor(1500);
+		await this.page.waitForSelector(LOGIN_PAGE.SELECTORS.EMAIL);
+		await this.page.type(LOGIN_PAGE.SELECTORS.EMAIL, CREDS.usernameS);
+		await this.page.type(LOGIN_PAGE.SELECTORS.PASSWORD, CREDS.passwordS);
+		await this.page.click(LOGIN_PAGE.SELECTORS.LOGIN_BUTTON);
+		await this.page.waitFor(1500);
 	}
 	public async logOut() {
 		await this.page.waitForSelector(SIDEMENU.SELECTORS.DROPDOWN);

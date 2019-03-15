@@ -99,6 +99,4 @@ export default class SideMenu {
 		const text = this.page.$eval(SIDEMENU.SELECTORS.HELP, (text) => text.innerText);
 		return text;
 	}
-
-	
 }

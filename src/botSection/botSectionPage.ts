@@ -108,11 +108,10 @@ export default class BotSection {
 		// type wrong word (not 'delete') and verify that button is remain disabled
 		await this.utils.click(SIDEMENU.SELECTORS.BOTS);
 		await this.utils.clickOnBotDeleteButton('C6164');
-		const buttonIsDisabled = await this.page.$(BOT_SECTION.SELECTORS.DISABLED_DELETE_BUTTON) !== null;
+		const buttonIsDisabled = (await this.page.$(BOT_SECTION.SELECTORS.DISABLED_DELETE_BUTTON)) !== null;
 		await this.utils.type(BOT_SECTION.SELECTORS.DELETE_TRAINED_BOT_INPUT, 'de');
-		const buttonIsStillDisabled = await this.page.$(BOT_SECTION.SELECTORS.DISABLED_DELETE_BUTTON) !== null;
+		const buttonIsStillDisabled = (await this.page.$(BOT_SECTION.SELECTORS.DISABLED_DELETE_BUTTON)) !== null;
 		await this.utils.click(BOT_SECTION.SELECTORS.CANCEL_BUTTON_ON_DELETE);
-		console.log('555: ', buttonIsStillDisabled);
 		return buttonIsStillDisabled;
 	}
 	public async deleteTrainedFlowBotCancel(): Promise<boolean> {
@@ -178,7 +177,7 @@ export default class BotSection {
 		// type wrong word (not 'delete') and verify that button is remain disabled
 		await this.utils.click(SIDEMENU.SELECTORS.BOTS);
 		await this.utils.clickOnBotDeleteButton('C6166');
-		const buttonIsDisabled = await this.page.$(BOT_SECTION.SELECTORS.DISABLED_DELETE_BUTTON) !== null;
+		const buttonIsDisabled = (await this.page.$(BOT_SECTION.SELECTORS.DISABLED_DELETE_BUTTON)) !== null;
 		await this.utils.type(BOT_SECTION.SELECTORS.DELETE_TRAINED_BOT_INPUT, 'de');
 		const buttonIsStillDisabled = (await this.page.$(BOT_SECTION.SELECTORS.DISABLED_DELETE_BUTTON)) !== null;
 		await this.utils.click(BOT_SECTION.SELECTORS.CANCEL_BUTTON_ON_DELETE);

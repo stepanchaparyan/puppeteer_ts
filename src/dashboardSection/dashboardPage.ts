@@ -35,19 +35,14 @@ export default class Dashboard {
 		await this.utils.click(SIDEMENU.SELECTORS.DASHBOARD);
 		await this.page.waitForSelector(DASHBOARD.SELECTORS.MESSAGES_PAST_7_DAYS_NUMBER);
 		const messagesCountBefore = await this.page.$eval(DASHBOARD.SELECTORS.MESSAGES_PAST_7_DAYS_NUMBER, (text) => text.innerText);
-		await this.utils.goToRUNPageOfBot('clickOnGoogle');		
-		// wait for iframe loading		
-		await this.page.waitFor(2000);
-		const frame = await this.page.frames().find((iframe) => iframe.name() === 'responsiveFrame');
-		await this.page.goto(frame.url());
+		const botUrl = await this.utils.getBotUrl('clickOnGoogle');
+		await this.page.goto(botUrl);
 		await this.utils.click(IFRAME.SELECTORS.MAIN_BUTTON);
 		await this.utils.click(IFRAME.SELECTORS.GOOGLE);
 		await this.page.goBack();
 		await this.utils.click(SIDEMENU.SELECTORS.DASHBOARD);
-		await this.page.waitFor(1000);
+		await this.page.waitFor(500);
 		const messagesCountAfter = await this.page.$eval(DASHBOARD.SELECTORS.MESSAGES_PAST_7_DAYS_NUMBER, (text) => text.innerText);
-		console.log('before', messagesCountBefore);
-		console.log('after ', messagesCountAfter);
 		const addedOneMessage = Number(messagesCountBefore) + 1 === Number(messagesCountAfter) ? true : false;
 		return addedOneMessage;
 	}
@@ -68,26 +63,21 @@ export default class Dashboard {
 		await this.utils.click(SIDEMENU.SELECTORS.DASHBOARD);
 		await this.page.waitForSelector(DASHBOARD.SELECTORS.MESSAGES_PAST_30_DAYS_NUMBER);
 		const messagesCountBefore = await this.page.$eval(DASHBOARD.SELECTORS.MESSAGES_PAST_30_DAYS_NUMBER, (text) => text.innerText);
-		await this.utils.goToRUNPageOfBot('clickOnGoogle');		
-		// wait for iframe loading
-		await this.page.waitFor(2000);
-		const frame = await this.page.frames().find((iframe) => iframe.name() === 'responsiveFrame');
-		await this.page.goto(frame.url());
+		const botUrl = await this.utils.getBotUrl('clickOnGoogle');
+		await this.page.goto(botUrl);
 		await this.utils.click(IFRAME.SELECTORS.MAIN_BUTTON);
 		await this.utils.click(IFRAME.SELECTORS.GOOGLE);
-		await this.page.goBack();		
+		await this.page.goBack();
 		await this.utils.click(SIDEMENU.SELECTORS.DASHBOARD);
-		await this.page.waitFor(1000);
+		await this.page.waitFor(500);
 		const messagesCountAfter = await this.page.$eval(DASHBOARD.SELECTORS.MESSAGES_PAST_30_DAYS_NUMBER, (text) => text.innerText);
-		console.log('before', messagesCountBefore);
-		console.log('after ', messagesCountAfter);
 		const addedOneMessage = Number(messagesCountBefore) + 1 === Number(messagesCountAfter) ? true : false;
 		return addedOneMessage;
 	}
 
 	public async sessionsPast30DaysExist(): Promise<boolean> {
 		await this.utils.click(SIDEMENU.SELECTORS.DASHBOARD);
-		return await this.page.$(DASHBOARD.SELECTORS.SESSIONS_PAST_30_DAYS_TEXT_DIV) !== null;
+		return (await this.page.$(DASHBOARD.SELECTORS.SESSIONS_PAST_30_DAYS_TEXT_DIV)) !== null;
 	}
 	public async sessionsPast30DaysSessions(): Promise<string> {
 		await this.utils.click(SIDEMENU.SELECTORS.DASHBOARD);
@@ -101,16 +91,13 @@ export default class Dashboard {
 		await this.utils.click(SIDEMENU.SELECTORS.DASHBOARD);
 		await this.page.waitForSelector(DASHBOARD.SELECTORS.SESSIONS_PAST_30_DAYS_NUMBER);
 		const messagesCountBefore = await this.page.$eval(DASHBOARD.SELECTORS.SESSIONS_PAST_30_DAYS_NUMBER, (text) => text.innerText);
-		await this.utils.goToRUNPageOfBot('clickOnGoogle');		
-		// wait for iframe loading
-		await this.page.waitFor(2000);
-		const frame = await this.page.frames().find((iframe) => iframe.name() === 'responsiveFrame');
-		await this.page.goto(frame.url());
+		const botUrl = await this.utils.getBotUrl('clickOnGoogle');
+		await this.page.goto(botUrl);
 		await this.utils.click(IFRAME.SELECTORS.MAIN_BUTTON);
 		await this.utils.click(IFRAME.SELECTORS.GOOGLE);
 		await this.page.goBack();
 		await this.utils.click(SIDEMENU.SELECTORS.DASHBOARD);
-		await this.page.waitFor(1000);
+		await this.page.waitFor(500);
 		const messagesCountAfter = await this.page.$eval(DASHBOARD.SELECTORS.SESSIONS_PAST_30_DAYS_NUMBER, (text) => text.innerText);
 		// console.log('before', messagesCountBefore);
 		// console.log('after ', messagesCountAfter);
@@ -128,7 +115,7 @@ export default class Dashboard {
 	}
 	public async botsCount(): Promise<boolean> {
 		await this.utils.click(SIDEMENU.SELECTORS.DASHBOARD);
-		await this.page.waitForSelector(DASHBOARD.SELECTORS.BOTS_COUNT_TEXT); 
+		await this.page.waitForSelector(DASHBOARD.SELECTORS.BOTS_COUNT_TEXT);
 		const botsCountText = await this.page.$eval(DASHBOARD.SELECTORS.BOTS_COUNT_TEXT, (text) => text.innerText);
 		const botsCount = botsCountText.substr(0, 2);
 		await this.utils.click(SIDEMENU.SELECTORS.BOTS);
@@ -174,11 +161,10 @@ export default class Dashboard {
 		const frame = await this.page.frames().find((iframe) => iframe.url() === 'https://app.iox.bot/iox-chatbot/chatwindow');
 		const byIOXButton = await frame.$(DASHBOARD.BOT.BYIOX_LINK);
 		await byIOXButton.click();
-		await this.page.waitFor(1500); //!
+		await this.page.waitFor(2000); //!
 		const pages = await this.browser.pages();
 		await pages[2].waitForSelector('#tmp_button-91792');
 		const url = await pages[2].url();
 		return url;
 	}
-
 }

@@ -68,7 +68,7 @@ export default class FlowBot {
 		// ? new question for boy
 		await this.page.waitFor(500);
 		await this.utils.click(BOT_SECTION.SELECTORS.QUESTION_ON_ANSWER_BOY);
-		await this.utils.type(BOT_SECTION.SELECTORS.ENTER_QUESTION_INPUT, 'How old are you?');	
+		await this.utils.type(BOT_SECTION.SELECTORS.ENTER_QUESTION_INPUT, 'How old are you?');
 		await this.utils.click(BOT_SECTION.SELECTORS.ADD_ON);
 		await this.utils.select(BOT_SECTION.SELECTORS.CHOOSE_QUESTION_TYPE, 'Freetext Feedback');
 		await this.page.waitFor(500);
@@ -165,20 +165,21 @@ export default class FlowBot {
 		await this.page.click(BOT_SECTION.SELECTORS.SLIDER_MAX_VALUE_INPUT);
 		await this.page.keyboard.down('Backspace');
 		await this.page.keyboard.down('Backspace');
-		await this.utils.type(BOT_SECTION.SELECTORS.SLIDER_MAX_VALUE_INPUT, '10');
-		await this.utils.click(BOT_SECTION.SELECTORS.SLIDER_MIN_VALUE_INPUT);
+		await this.page.type(BOT_SECTION.SELECTORS.SLIDER_MAX_VALUE_INPUT, '10');
+		await this.page.click(BOT_SECTION.SELECTORS.SLIDER_MIN_VALUE_INPUT);
 		await this.page.keyboard.down('Backspace');
 		await this.page.keyboard.down('Backspace');
-		await this.utils.type(BOT_SECTION.SELECTORS.SLIDER_MIN_VALUE_INPUT, '1');
-		await this.utils.click(BOT_SECTION.SELECTORS.SLIDER_STEP_INPUT);
+		await this.page.keyboard.down('Backspace');
+		await this.page.type(BOT_SECTION.SELECTORS.SLIDER_MIN_VALUE_INPUT, '1');
+		await this.page.click(BOT_SECTION.SELECTORS.SLIDER_STEP_INPUT);
 		await this.page.keyboard.down('Backspace');
 		await this.page.keyboard.down('Backspace');
-		await this.utils.type(BOT_SECTION.SELECTORS.SLIDER_STEP_INPUT, '1');
-		await this.utils.click(BOT_SECTION.SELECTORS.SLIDER_DEFAULT_INPUT);
+		await this.page.type(BOT_SECTION.SELECTORS.SLIDER_STEP_INPUT, '1');
+		await this.page.click(BOT_SECTION.SELECTORS.SLIDER_DEFAULT_INPUT);
 		await this.page.keyboard.down('Backspace');
 		await this.page.keyboard.down('Backspace');
-		await this.utils.type(BOT_SECTION.SELECTORS.SLIDER_DEFAULT_INPUT, '5');
-		await this.utils.click(BOT_SECTION.SELECTORS.QUESTION_SAVE_BUTTON);
+		await this.page.type(BOT_SECTION.SELECTORS.SLIDER_DEFAULT_INPUT, '5');
+		await this.page.click(BOT_SECTION.SELECTORS.QUESTION_SAVE_BUTTON);
 
 		// * Search
 		// await this.page.waitFor(500);
@@ -203,22 +204,19 @@ export default class FlowBot {
 		// await this.page.click(BOT_SECTION.SELECTORS.QUESTION_SAVE_BUTTON);
 
 		// //? only for screenshots
+		// await this.page.waitFor(1000);
+		// await this.page.click('body > app-root > div > iox-page-container > div > iox-create > div > iox-conversation-tree > div > div.conversation-page > div > tree > tree-internal > ul > li > tree-internal:nth-child(10) > ul > li > div > div.node-value.ng-star-inserted > div > div > button.btn.btn-info.btn-xs.pull-right > span');
+		// await this.page.waitFor(1000);
+	
 		// await this.page.evaluate(() => {
 		// 	document.querySelector('body > app-root > div > iox-page-container > div > iox-create > div > iox-conversation-tree > div > div.conversation-page > div > tree > tree-internal > ul > li > tree-internal:nth-child(9) > ul > li > tree-internal > ul > li > div > div.node-value.ng-star-inserted > div > div > button.btn.btn-primary.btn-xs.pull-right > span')
 		// 	.scrollIntoView();
 		// });
 		// await this.utils.compareScreenshots('flowBot', 'bot1');
 
-		await this.page.waitFor(500);
 		await this.utils.trainBot();
-
-		// context('deleteBot', () => {
-		// 	it('delete testBot', async () => {
-		// 		expect(await botSection.deleteBot('testBotIA')).to.equal(true);
-		// 	});
-		// });
+		await this.utils.deleteTrainedBot('testBotIA');
 
 		return true;
 	}
-
 }

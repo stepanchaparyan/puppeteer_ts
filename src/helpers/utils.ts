@@ -3,7 +3,6 @@ import * as ScreenshotTester from 'puppeteer-screenshot-tester';
 import { BOT_SECTION } from '../botSection/botsSectionConstants';
 import { SIDEMENU } from '../sideMenu/sideMenuConstants';
 import { IFRAME } from '../botSection/iframeConstants';
-import { DASHBOARD } from '../dashboardSection/dashboardConstants';
 
 export default class Utils {
 	private page: any;
@@ -11,11 +10,7 @@ export default class Utils {
 		this.page = page;
 	}
 
-	public async compareScreenshots(
-		screenshotPath: string,
-		name: string,
-		component: any = this.page
-	): Promise<boolean> {
+	public async compareScreenshots(screenshotPath: string, name: string, component: any = this.page): Promise<boolean> {
 		const src = 'src';
 		const helpers = 'helpers';
 		const screenshots = 'screenshots';
@@ -45,11 +40,7 @@ export default class Utils {
 		let i;
 		const botsCount = await this.page.$$eval(BOT_SECTION.SELECTORS.ALL_BOTS, (bots) => bots.length);
 		for (i = 1; i < botsCount; i++) {
-			if (
-				(await this.page.$(
-					`body > app-root > div > iox-page-container > div > iox-bots > div > div:nth-child(${i}) > iox-bot-item > div > div.bot-content > div.bot-name`
-				)) !== null
-			) {
+			if ((await this.page.$(`body > app-root > div > iox-page-container > div > iox-bots > div > div:nth-child(${i}) > iox-bot-item > div > div.bot-content > div.bot-name`)) !== null) {
 				const row = `body > app-root > div > iox-page-container > div > iox-bots > div > div:nth-child(${i}) > iox-bot-item > div > div.bot-content > div.bot-name`;
 				const anyNextLocation = await this.page.$eval(row, (element) => element.innerText);
 				if (anyNextLocation === botName) {
@@ -62,19 +53,14 @@ export default class Utils {
 
 	public async clickOnBotDeleteButton(botName: string): Promise<void> {
 		const botNumber = await this.getCorrespondingBotNumber(botName);
-		await this.page.waitForSelector(
-			`body > app-root > div > iox-page-container > div > iox-bots > div > div:nth-child(${botNumber}) > iox-bot-item > div > div.bot-content > div.action-buttons.btn-group > button:nth-child(3) > i`
-		);
-		await this.page.click(
-			`body > app-root > div > iox-page-container > div > iox-bots > div > div:nth-child(${botNumber}) > iox-bot-item > div > div.bot-content > div.action-buttons.btn-group > button:nth-child(3) > i`
-		);
+		await this.page.waitForSelector(`body > app-root > div > iox-page-container > div > iox-bots > div > div:nth-child(${botNumber}) > iox-bot-item > div > div.bot-content > div.action-buttons.btn-group > button:nth-child(3) > i`);
+		await this.page.click(`body > app-root > div > iox-page-container > div > iox-bots > div > div:nth-child(${botNumber}) > iox-bot-item > div > div.bot-content > div.action-buttons.btn-group > button:nth-child(3) > i`);
 	}
 
 	public async botIsExist(botName: string): Promise<boolean> {
 		await this.reload();
 		const botNumber = await this.getCorrespondingBotNumber(botName);
-		const botIsExist =
-			(await this.page.$(`body > app-root > div > iox-page-container > div > iox-bots > div > div:nth-child(${botNumber}) > iox-bot-item > div > div.bot-content > div.action-buttons.btn-group > button:nth-child(3) > i`)) !== null;
+		const botIsExist = (await this.page.$(`body > app-root > div > iox-page-container > div > iox-bots > div > div:nth-child(${botNumber}) > iox-bot-item > div > div.bot-content > div.action-buttons.btn-group > button:nth-child(3) > i`)) !== null;
 		return botIsExist;
 	}
 
@@ -110,6 +96,7 @@ export default class Utils {
 	}
 
 	public async trainBot(): Promise<void> {
+		await this.page.waitFor(1000); //! 
 		await this.page.waitForSelector(BOT_SECTION.SELECTORS.RUN);
 		await this.page.click(BOT_SECTION.SELECTORS.RUN);
 		await this.page.waitForSelector(BOT_SECTION.SELECTORS.TRAIN);
@@ -119,7 +106,7 @@ export default class Utils {
 
 	public async reload(): Promise<void> {
 		await this.page.reload({ waitUntil: 'load' });
-		await this.page.waitFor(500); //!
+		await this.page.waitFor(500);
 	}
 
 	public async clickOnCreateBotButton(): Promise<void> {
@@ -170,28 +157,22 @@ export default class Utils {
 	}
 
 	public async acceptChatBotAgreement(): Promise<boolean> {
-		//await this.page.waitFor(1000);
-		await this.click(SIDEMENU.SELECTORS.BOTS);
-		const botNumber = await this.getCorrespondingBotNumber('clickOnGoogle');
-		await this.click(`body > app-root > div > iox-page-container > div > iox-bots > div > div:nth-child(${botNumber}) > iox-bot-item > div > div.img-container > img`);
-		await this.click(BOT_SECTION.SELECTORS.RUN);
-		// wait for iframe loading
-		await this.page.waitFor(3000);
-		const frame = await this.page.frames().find((iframe) => iframe.name() === 'responsiveFrame');
-		const mainButton = await frame.$(IFRAME.SELECTORS.MAIN_BUTTON);
-		await mainButton.click();
-		await this.page.waitFor(1000);
-		const agreementCheckbox = await frame.$(IFRAME.SELECTORS.AGREEMENT_CHECKBOX);
-		await agreementCheckbox.click();
-		const agreementConfirmButton = await frame.$(IFRAME.SELECTORS.AGREEMENT_CONFIRM_BUTTON);
-		await agreementConfirmButton.click();
-		//await this.page.waitFor(2000);
+		const botUrl = await this.getBotUrl('clickOnGoogle');
+		await this.page.goto(botUrl);
+		await this.click(IFRAME.SELECTORS.MAIN_BUTTON);
+		await this.click(IFRAME.SELECTORS.AGREEMENT_CHECKBOX);
+		await this.click(IFRAME.SELECTORS.AGREEMENT_CONFIRM_BUTTON);
+		await this.page.goBack();
 		return true;
 	}
-	public async goToRUNPageOfBot(botName: string): Promise<void> {
+
+	public async getBotUrl(botName: string): Promise<string> {
 		await this.click(SIDEMENU.SELECTORS.BOTS);
 		const botNumber = await this.getCorrespondingBotNumber(botName);
-		await this.click(`body > app-root > div > iox-page-container > div > iox-bots > div > div:nth-child(${botNumber}) > iox-bot-item > div > div.img-container > img`);
-		await this.click(BOT_SECTION.SELECTORS.RUN);
+		const linkOfBot = await this.page.$(`body > app-root > div > iox-page-container > div > iox-bots > div > div:nth-child(${botNumber}) > iox-bot-item > div > div.bot-content > div.copy-area-container > div > div > a`);
+		const botHref = await linkOfBot.getProperty('href');
+		const botUrlHome = botHref._remoteObject.value;
+		const botUrlChat = botUrlHome.replace('home', 'chat');
+		return botUrlChat;
 	}
 }

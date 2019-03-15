@@ -11,7 +11,7 @@ let dashboard: any;
 let utils: any;
 const viewport: any = { width: 1020, height: 1080 };
 
-describe.only('Dashboard page elements', () => {
+describe('Dashboard page elements', () => {
 	before(async () => {
 		browser = await launchPuppeteer();
 		page = await browser.newPage();
