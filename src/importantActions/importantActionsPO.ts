@@ -215,6 +215,7 @@ export default class FlowBot {
 		// await this.utils.compareScreenshots('flowBot', 'bot1');
 
 		await this.utils.trainBot();
+		await this.page.waitFor(2000);
 		await this.utils.deleteTrainedBot('testBotIA');
 
 		return true;

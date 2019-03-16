@@ -41,7 +41,7 @@ describe('Bot section', () => {
 		});
 	});
 
-	context('Delete Flow Bot', function() {
+	context.skip('Delete Flow Bot', function() {
 		it('C6163 - Check the "Delete Flow Bot" (not trained) functionality', async () => {
 			expect(await botSection.deleteNotTrainedFlowBot()).to.equal(true);
 		});

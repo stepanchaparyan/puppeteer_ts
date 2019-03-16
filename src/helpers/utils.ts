@@ -74,7 +74,8 @@ export default class Utils {
 	}
 
 	public async deleteTrainedBot(botName: string): Promise<void> {
-		await this.page.click(SIDEMENU.SELECTORS.BOTS);
+		await this.page.waitFor(1000);//!
+		await this.click(SIDEMENU.SELECTORS.BOTS);
 		await this.clickOnBotDeleteButton(botName);
 		await this.page.waitForSelector(BOT_SECTION.SELECTORS.DELETE_TRAINED_BOT_INPUT);
 		await this.page.type(BOT_SECTION.SELECTORS.DELETE_TRAINED_BOT_INPUT, 'delete');
