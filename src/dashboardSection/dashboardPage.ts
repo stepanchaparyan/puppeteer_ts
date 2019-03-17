@@ -32,8 +32,8 @@ export default class Dashboard {
 	}
 
 	public async messagesPast7DaysNumber(): Promise<boolean> {
-		await this.utils.click(SIDEMENU.SELECTORS.DASHBOARD);
-		await this.page.waitForSelector(DASHBOARD.SELECTORS.MESSAGES_PAST_7_DAYS_NUMBER);
+		await this.utils.click(SIDEMENU.SELECTORS.DASHBOARD);	
+		await this.page.waitForFunction(`document.querySelector('body > app-root > div > iox-page-container > div > iox-dashboard > div > div.col-lg-7.col-md-7.col-sm-12.col-xs-12.dashboard-column-left > div:nth-child(1) > div > span').innerText > 0;`);
 		const messagesCountBefore = await this.page.$eval(DASHBOARD.SELECTORS.MESSAGES_PAST_7_DAYS_NUMBER, (text) => text.innerText);
 		const botUrl = await this.utils.getBotUrl('clickOnGoogle');
 		await this.page.goto(botUrl);
@@ -61,7 +61,7 @@ export default class Dashboard {
 	}
 	public async messagesPast30DaysNumber(): Promise<boolean> {
 		await this.utils.click(SIDEMENU.SELECTORS.DASHBOARD);
-		await this.page.waitForSelector(DASHBOARD.SELECTORS.MESSAGES_PAST_30_DAYS_NUMBER);
+		await this.page.waitForFunction(`document.querySelector('body > app-root > div > iox-page-container > div > iox-dashboard > div > div.col-lg-7.col-md-7.col-sm-12.col-xs-12.dashboard-column-left > div:nth-child(2) > div > span').innerText > 0;`);
 		const messagesCountBefore = await this.page.$eval(DASHBOARD.SELECTORS.MESSAGES_PAST_30_DAYS_NUMBER, (text) => text.innerText);
 		const botUrl = await this.utils.getBotUrl('clickOnGoogle');
 		await this.page.goto(botUrl);
@@ -89,7 +89,7 @@ export default class Dashboard {
 	}
 	public async sessionsPast30DaysNumber(): Promise<boolean> {
 		await this.utils.click(SIDEMENU.SELECTORS.DASHBOARD);
-		await this.page.waitForSelector(DASHBOARD.SELECTORS.SESSIONS_PAST_30_DAYS_NUMBER);
+		await this.page.waitForFunction(`document.querySelector('body > app-root > div > iox-page-container > div > iox-dashboard > div > div.col-lg-7.col-md-7.col-sm-12.col-xs-12.dashboard-column-left > div:nth-child(4) > div > span').innerText > 0;`);
 		const messagesCountBefore = await this.page.$eval(DASHBOARD.SELECTORS.SESSIONS_PAST_30_DAYS_NUMBER, (text) => text.innerText);
 		const botUrl = await this.utils.getBotUrl('clickOnGoogle');
 		await this.page.goto(botUrl);

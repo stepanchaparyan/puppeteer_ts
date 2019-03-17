@@ -27,5 +27,8 @@ describe('Important Actions', () => {
 		it('Create long flow bot', async () => {
 			expect(await flowBot.createBotByImportantActionDoc()).to.equal(true);
 		});
+		// it('test', async () => {
+		// 	expect(await flowBot.test()).to.equal(true);
+		// });
 	});
 });

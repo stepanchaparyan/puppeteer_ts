@@ -81,6 +81,8 @@ export default class Utils {
 		await this.page.type(BOT_SECTION.SELECTORS.DELETE_TRAINED_BOT_INPUT, 'delete');
 		await this.page.waitForSelector(BOT_SECTION.SELECTORS.DELETE_TRAINED_BOT_DELETE_BUTTON);
 		await this.page.click(BOT_SECTION.SELECTORS.DELETE_TRAINED_BOT_DELETE_BUTTON, { delay: 50 });
+		await this.page.waitFor(1000);//!
+
 	}
 
 	public async integrateBotToGoogle(): Promise<void> {

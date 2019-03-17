@@ -167,6 +167,7 @@ export default class FlowBot {
 		await this.page.keyboard.down('Backspace');
 		await this.page.type(BOT_SECTION.SELECTORS.SLIDER_MAX_VALUE_INPUT, '10');
 		await this.page.click(BOT_SECTION.SELECTORS.SLIDER_MIN_VALUE_INPUT);
+		await this.page.waitFor(1000);
 		await this.page.keyboard.down('Backspace');
 		await this.page.keyboard.down('Backspace');
 		await this.page.keyboard.down('Backspace');
@@ -215,8 +216,18 @@ export default class FlowBot {
 		// await this.utils.compareScreenshots('flowBot', 'bot1');
 
 		await this.utils.trainBot();
-		await this.page.waitFor(2000);
 		await this.utils.deleteTrainedBot('testBotIA');
+
+		return true;
+	}
+
+	public async test(): Promise<boolean> {
+		await this.utils.click(SIDEMENU.SELECTORS.DROPDOWN);
+		await this.utils.click('body > app-root > div > iox-side-menu > div > div.ng-tns-c2-0 > div > div > ul > li:nth-child(2) > a');
+		await this.page.waitFor(2000);
+
+		await this.page.waitForFunction(
+			'document.querySelector("#profile > iox-registration > div > div > form > div:nth-child(1) > div:nth-child(1) > input").value == "Stepan";');
 
 		return true;
 	}
