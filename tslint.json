@@ -2,7 +2,7 @@
     "extends": "tslint:recommended",
     "rules": {
         "max-line-length": {"options": 400},
-        "indent": [true, "tabs", 1],
+        "indent": [true, "tabs", 2],
         "quotemark": [true, "single", "backtick"],
         "no-var-requires": true,
         "no-var-keyword": true,

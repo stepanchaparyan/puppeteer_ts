@@ -1,7 +1,7 @@
 import { expect } from 'chai';
 import launchPuppeteer from '../launchPuppeteer';
-import SideMenu from '../src/sideMenu/sideMenuPage';
 import LoginPage from '../src/loginSection/loginPage';
+import SideMenu from '../src/sideMenu/sideMenuPage';
 
 let browser;
 let page;

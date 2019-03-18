@@ -32,9 +32,8 @@ export default class FlowBot {
 		// * Options
 		await this.page.waitFor(500);
 		await this.utils.click(BOT_SECTION.SELECTORS.ADD_SUB_DIALOG);
-		//await this.page.waitFor(500);
 		await this.utils.type(BOT_SECTION.SELECTORS.ENTER_QUESTION_INPUT, 'Would you like to continue?');
-		await this.utils.click(BOT_SECTION.SELECTORS.QUESTION_SAVE_BUTTON);
+		await this.utils.click(BOT_SECTION.SELECTORS.QUESTION_SAVE_BUTTON, { delay: 100 });
 		await this.page.waitFor(500);
 		await this.utils.click(BOT_SECTION.SELECTORS.CREATE_ANSWER_Q4);
 		await this.page.waitFor(500);
@@ -90,7 +89,7 @@ export default class FlowBot {
 		await this.utils.select(BOT_SECTION.SELECTORS.CHOOSE_QUESTION_TYPE, 'Location picker');
 		await this.utils.click(BOT_SECTION.SELECTORS.QUESTION_SAVE_BUTTON);
 
-		// ! new question for girl
+		// new question for girl
 		await this.page.waitFor(500);
 		await this.utils.click(BOT_SECTION.SELECTORS.QUESTION_ON_ANSWER_GIRL);
 		await this.page.waitFor(500);

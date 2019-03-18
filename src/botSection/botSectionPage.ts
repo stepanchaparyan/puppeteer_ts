@@ -1,8 +1,8 @@
+import LoginPage from '../loginSection/loginPage';
+import Utils from '../helpers/utils';
 import { BOT_SECTION } from './botsSectionConstants';
 import { DASHBOARD } from '../dashboardSection/dashboardConstants';
 import { SIDEMENU } from '../sideMenu/sideMenuConstants';
-import Utils from '../helpers/utils';
-import LoginPage from '../loginSection/loginPage';
 
 export default class BotSection {
 	private page: any;
@@ -19,12 +19,18 @@ export default class BotSection {
 		for (let i = 0; i < 3; i++) {
 			await this.utils.createFlowBot('C69');
 			// Location Question
+			await this.page.waitFor(500);// !
 			await this.utils.click(BOT_SECTION.SELECTORS.ADD_SUB_DIALOG);
+			await this.page.waitFor(500);// !
 			await this.utils.type(BOT_SECTION.SELECTORS.ENTER_QUESTION_INPUT, 'Where are you from?');
+			//await this.page.waitFor(500);// !
 			await this.utils.click(BOT_SECTION.SELECTORS.ADD_ON);
+			//await this.page.waitFor(500);// !
 			await this.utils.select(BOT_SECTION.SELECTORS.CHOOSE_QUESTION_TYPE, 'Location picker');
+			//await this.page.waitFor(500);// !
 			await this.utils.click(BOT_SECTION.SELECTORS.QUESTION_SAVE_BUTTON);
-			await this.page.waitForSelector(BOT_SECTION.SELECTORS.QUESTION_SAVE_BUTTON, { hidden: true });
+			await this.page.waitForSelector(BOT_SECTION.SELECTORS.QUESTION_SAVE_BUTTON, { visible: false, delay: 200 });
+			await this.page.waitFor(500);// !
 		}
 		await this.utils.deleteBot('C69');
 		await this.utils.reload();

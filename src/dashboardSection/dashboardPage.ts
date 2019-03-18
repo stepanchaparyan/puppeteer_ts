@@ -1,8 +1,8 @@
 import { BOT_SECTION } from '../botSection/botsSectionConstants';
-import { DASHBOARD } from './dashboardConstants';
 import { IFRAME } from '../botSection/iframeConstants';
-import { SIDEMENU } from '../sideMenu/sideMenuConstants';
 import Utils from '../helpers/utils';
+import { SIDEMENU } from '../sideMenu/sideMenuConstants';
+import { DASHBOARD } from './dashboardConstants';
 
 export default class Dashboard {
 	private browser: any;
@@ -32,7 +32,7 @@ export default class Dashboard {
 	}
 
 	public async messagesPast7DaysNumber(): Promise<boolean> {
-		await this.utils.click(SIDEMENU.SELECTORS.DASHBOARD);	
+		await this.utils.click(SIDEMENU.SELECTORS.DASHBOARD);
 		await this.page.waitForFunction(`document.querySelector('body > app-root > div > iox-page-container > div > iox-dashboard > div > div.col-lg-7.col-md-7.col-sm-12.col-xs-12.dashboard-column-left > div:nth-child(1) > div > span').innerText > 0;`);
 		const messagesCountBefore = await this.page.$eval(DASHBOARD.SELECTORS.MESSAGES_PAST_7_DAYS_NUMBER, (text) => text.innerText);
 		const botUrl = await this.utils.getBotUrl('clickOnGoogle');
@@ -161,7 +161,7 @@ export default class Dashboard {
 		const frame = await this.page.frames().find((iframe) => iframe.url() === 'https://app.iox.bot/iox-chatbot/chatwindow');
 		const byIOXButton = await frame.$(DASHBOARD.BOT.BYIOX_LINK);
 		await byIOXButton.click();
-		await this.page.waitFor(2000); //!
+		await this.page.waitFor(2000);// !
 		const pages = await this.browser.pages();
 		await pages[2].waitForSelector('#tmp_button-91792');
 		const url = await pages[2].url();
