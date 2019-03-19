@@ -1,5 +1,5 @@
-import { SIDEMENU } from '../sideMenu/sideMenuConstants';
 import Utils from '../helpers/utils';
+import { SIDEMENU } from '../sideMenu/sideMenuConstants';
 
 export default class SideMenu {
 	private page: any;

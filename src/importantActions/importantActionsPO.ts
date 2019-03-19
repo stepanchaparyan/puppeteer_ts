@@ -1,6 +1,6 @@
 import { BOT_SECTION } from '../botSection/botsSectionConstants';
-import { SIDEMENU } from '../sideMenu/sideMenuConstants';
 import Utils from '../helpers/utils';
+import { SIDEMENU } from '../sideMenu/sideMenuConstants';
 
 export default class FlowBot {
 	private page: any;
@@ -87,6 +87,7 @@ export default class FlowBot {
 		await this.utils.type(BOT_SECTION.SELECTORS.ENTER_QUESTION_INPUT, 'Where are you from?');
 		await this.utils.click(BOT_SECTION.SELECTORS.ADD_ON);
 		await this.utils.select(BOT_SECTION.SELECTORS.CHOOSE_QUESTION_TYPE, 'Location picker');
+		await this.page.waitFor(500);
 		await this.utils.click(BOT_SECTION.SELECTORS.QUESTION_SAVE_BUTTON);
 
 		// new question for girl

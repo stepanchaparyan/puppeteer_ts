@@ -26,6 +26,7 @@ module.exports = {
 			DISABLED_DELETE_BUTTON: 'body > modal-container > div > div > div > form > button.btn.btn-default[disabled]',
 			DELETE_BOT_NOTIFICATION: 'body > app-root > div > iox-page-container > div > notifier-container > ul > li > notifier-notification',
 			EDIT_FIRST_QUESTION: 'body > app-root > div > iox-page-container > div > iox-create > div > iox-conversation-tree > div > div.conversation-page > div > tree > tree-internal > ul > li > tree-internal:nth-child(3) > ul > li > div > div.node-value.ng-star-inserted > div > div > button.btn.btn-info.btn-xs.pull-right > span',
+			FIRST_QUESTION: 'body > app-root > div > iox-page-container > div > iox-create > div > iox-conversation-tree > div > div.conversation-page > div > tree > tree-internal > ul > li > tree-internal:nth-child(3) > ul > li > div > div.node-value.ng-star-inserted > div > div > div > span',
 			REMOVE_DEFAULT_QUESTION: 'body > modal-container > div > div > div.modal-body > form > div:nth-child(1) > iox-multiple-input > div.responses-table > div:nth-child(1) > button > i',
 			ENTER_QUESTION_INPUT: '#row0',
 			ADD_ON: 'body > modal-container > div > div > div.modal-body > form > div.form-group.ng-star-inserted > div > div > label',

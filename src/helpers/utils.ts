@@ -1,8 +1,8 @@
 import * as path from 'path';
 import * as ScreenshotTester from 'puppeteer-screenshot-tester';
 import { BOT_SECTION } from '../botSection/botsSectionConstants';
-import { SIDEMENU } from '../sideMenu/sideMenuConstants';
 import { IFRAME } from '../botSection/iframeConstants';
+import { SIDEMENU } from '../sideMenu/sideMenuConstants';
 
 export default class Utils {
 	private page: any;
@@ -57,6 +57,12 @@ export default class Utils {
 		await this.page.click(`body > app-root > div > iox-page-container > div > iox-bots > div > div:nth-child(${botNumber}) > iox-bot-item > div > div.bot-content > div.action-buttons.btn-group > button:nth-child(3) > i`);
 	}
 
+	public async clickOnBotUpdateButton(botName: string): Promise<void> {
+		const botNumber = await this.getCorrespondingBotNumber(botName);
+		await this.page.waitForSelector(`body > app-root > div > iox-page-container > div > iox-bots > div > div:nth-child(${botNumber}) > iox-bot-item > div > div.bot-content > div.action-buttons.btn-group > button:nth-child(1) > i`);
+		await this.page.click(`body > app-root > div > iox-page-container > div > iox-bots > div > div:nth-child(${botNumber}) > iox-bot-item > div > div.bot-content > div.action-buttons.btn-group > button:nth-child(1) > i`);
+	}
+
 	public async botIsExist(botName: string): Promise<boolean> {
 		await this.reload();
 		const botNumber = await this.getCorrespondingBotNumber(botName);
@@ -74,7 +80,7 @@ export default class Utils {
 	}
 
 	public async deleteTrainedBot(botName: string): Promise<void> {
-		await this.page.waitFor(1000);//!
+		await this.page.waitFor(2000);//!
 		await this.click(SIDEMENU.SELECTORS.BOTS);
 		await this.clickOnBotDeleteButton(botName);
 		await this.page.waitForSelector(BOT_SECTION.SELECTORS.DELETE_TRAINED_BOT_INPUT);

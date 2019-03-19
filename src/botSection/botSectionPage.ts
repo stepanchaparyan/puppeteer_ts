@@ -1,8 +1,8 @@
-import LoginPage from '../loginSection/loginPage';
-import Utils from '../helpers/utils';
 import { BOT_SECTION } from './botsSectionConstants';
 import { DASHBOARD } from '../dashboardSection/dashboardConstants';
 import { SIDEMENU } from '../sideMenu/sideMenuConstants';
+import Utils from '../helpers/utils';
+import LoginPage from '../loginSection/loginPage';
 
 export default class BotSection {
 	private page: any;
@@ -23,11 +23,8 @@ export default class BotSection {
 			await this.utils.click(BOT_SECTION.SELECTORS.ADD_SUB_DIALOG);
 			await this.page.waitFor(500);// !
 			await this.utils.type(BOT_SECTION.SELECTORS.ENTER_QUESTION_INPUT, 'Where are you from?');
-			//await this.page.waitFor(500);// !
 			await this.utils.click(BOT_SECTION.SELECTORS.ADD_ON);
-			//await this.page.waitFor(500);// !
 			await this.utils.select(BOT_SECTION.SELECTORS.CHOOSE_QUESTION_TYPE, 'Location picker');
-			//await this.page.waitFor(500);// !
 			await this.utils.click(BOT_SECTION.SELECTORS.QUESTION_SAVE_BUTTON);
 			await this.page.waitForSelector(BOT_SECTION.SELECTORS.QUESTION_SAVE_BUTTON, { visible: false, delay: 200 });
 			await this.page.waitFor(500);// !
@@ -42,21 +39,28 @@ export default class BotSection {
 	}
 	public async createBotsAndCheckCount(): Promise<boolean> {
 		await this.utils.click(SIDEMENU.SELECTORS.DASHBOARD);
+		//
 		await this.page.waitForSelector(DASHBOARD.SELECTORS.BOTS_COUNT_TEXT, { visible: true });
 		let botsCountText = await this.page.$eval(DASHBOARD.SELECTORS.BOTS_COUNT_TEXT, (text) => text.innerText);
 		const botsCountBefore = botsCountText.substr(0, 2);
+		//
 		for (let i = 0; i < 10; i++) {
 			await this.utils.createFlowBot('testBotForC282');
 		}
+		//
 		await this.utils.click(SIDEMENU.SELECTORS.DASHBOARD);
+		//
 		await this.page.waitForSelector(DASHBOARD.SELECTORS.BOTS_COUNT_TEXT, { visible: true });
 		botsCountText = await this.page.$eval(DASHBOARD.SELECTORS.BOTS_COUNT_TEXT, (text) => text.innerText);
 		const botsCountAfter = botsCountText.substr(0, 2);
+		//
 		const botsCountIsRight = Number(botsCountBefore) + 10 === Number(botsCountAfter) ? true : false;
+		//
 		for (let i = 0; i < 10; i++) {
 			await this.utils.deleteBot('testBotForC282');
 			await this.utils.reload();
 		}
+		//
 		return botsCountIsRight;
 	}
 
@@ -215,6 +219,24 @@ export default class BotSection {
 		await this.page.waitForSelector(BOT_SECTION.SELECTORS.DELETE_BOT_NOTIFICATION);
 		const text = await this.page.$eval(BOT_SECTION.SELECTORS.DELETE_BOT_NOTIFICATION, (text) => text.innerText);
 		await this.page.reload();
+		return text;
+	}
+	public async updateBot(): Promise<boolean> {
+		await this.utils.createFlowBot('C73');
+		await this.utils.click(SIDEMENU.SELECTORS.BOTS);
+		await this.utils.clickOnBotUpdateButton('C73');
+		// * Free text
+		await this.utils.click(BOT_SECTION.SELECTORS.EDIT_FIRST_QUESTION);
+		await this.utils.click(BOT_SECTION.SELECTORS.REMOVE_DEFAULT_QUESTION);
+		await this.utils.type(BOT_SECTION.SELECTORS.ENTER_QUESTION_INPUT, 'What is your name?');
+		await this.page.waitFor(500);
+		await this.utils.click(BOT_SECTION.SELECTORS.QUESTION_SAVE_BUTTON);
+		await this.page.waitFor(500);
+		await this.utils.click(SIDEMENU.SELECTORS.BOTS);
+		await this.utils.clickOnBotUpdateButton('C73');
+		await this.page.waitForSelector(BOT_SECTION.SELECTORS.FIRST_QUESTION);
+		const text = await this.page.$eval(BOT_SECTION.SELECTORS.FIRST_QUESTION, (text) => text.innerText);
+		await this.utils.deleteBot('C73');
 		return text;
 	}
 }

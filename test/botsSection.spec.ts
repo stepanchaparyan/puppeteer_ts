@@ -26,6 +26,8 @@ describe('Bot section', () => {
 
 	context('Create Flow Bot', () => {
 		it('C282 - Check that when user creates more than 10 bots the website works as it was', async () => {
+			// create 10 bot
+			// test that 10 + 8 = 18
 			expect(await botSection.createBotsAndCheckCount()).to.equal(true);
 		});
 		it('C69 - Check the "Create Bot" functionality', async () => {
@@ -89,4 +91,10 @@ describe('Bot section', () => {
 		});
 	});
 
+	context('Update Bot', () => {
+		it('C73 - Update bot', async () => {
+			expect(await botSection.updateBot()).to.include('What is your name?');
+		});
+
+	});
 });
