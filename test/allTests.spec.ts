@@ -1,4 +1,4 @@
-import './sideMenu.spec';
+import './sideMenuSection.spec';
 import './dashboardSection.spec';
 import './botsSection.spec';
-import './importantActions.spec';
+import './smokeTesting';

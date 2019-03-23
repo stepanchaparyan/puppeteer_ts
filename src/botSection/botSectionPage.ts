@@ -1,6 +1,6 @@
 import { BOT_SECTION } from './botsSectionConstants';
 import { DASHBOARD } from '../dashboardSection/dashboardConstants';
-import { SIDEMENU } from '../sideMenu/sideMenuConstants';
+import { SIDEMENU } from '../sideMenuSection/sideMenuConstants';
 import Utils from '../helpers/utils';
 import LoginPage from '../loginSection/loginPage';
 
@@ -15,53 +15,43 @@ export default class BotSection {
 		this.loginPage = new LoginPage(page);
 	}
 
-	public async createBots(): Promise<boolean> {
-		for (let i = 0; i < 3; i++) {
-			await this.utils.createFlowBot('C69');
-			// Location Question
-			await this.page.waitFor(500);// !
+	public async createLocationQuestion(): Promise<void> {
 			await this.utils.click(BOT_SECTION.SELECTORS.ADD_SUB_DIALOG);
-			await this.page.waitFor(500);// !
+			await this.page.waitFor(500);//
 			await this.utils.type(BOT_SECTION.SELECTORS.ENTER_QUESTION_INPUT, 'Where are you from?');
 			await this.utils.click(BOT_SECTION.SELECTORS.ADD_ON);
 			await this.utils.select(BOT_SECTION.SELECTORS.CHOOSE_QUESTION_TYPE, 'Location picker');
 			await this.utils.click(BOT_SECTION.SELECTORS.QUESTION_SAVE_BUTTON);
 			await this.page.waitForSelector(BOT_SECTION.SELECTORS.QUESTION_SAVE_BUTTON, { visible: false, delay: 200 });
-			await this.page.waitFor(500);// !
-		}
-		await this.utils.deleteBot('C69');
-		await this.utils.reload();
-		await this.utils.deleteBot('C69');
-		await this.utils.reload();
-		await this.utils.deleteBot('C69');
-		await this.utils.reload();
-		return true;
+			await this.page.waitFor(500);//
 	}
-	public async createBotsAndCheckCount(): Promise<boolean> {
-		await this.utils.click(SIDEMENU.SELECTORS.DASHBOARD);
-		//
-		await this.page.waitForSelector(DASHBOARD.SELECTORS.BOTS_COUNT_TEXT, { visible: true });
-		let botsCountText = await this.page.$eval(DASHBOARD.SELECTORS.BOTS_COUNT_TEXT, (text) => text.innerText);
-		const botsCountBefore = botsCountText.substr(0, 2);
-		//
-		for (let i = 0; i < 10; i++) {
-			await this.utils.createFlowBot('testBotForC282');
+	public async createBotsWithLocationQuestion(botName: string, count: number = 1): Promise<void> {
+		for (let i = 0; i < count; i++) {
+			await this.utils.createFlowBot(botName);
+			await this.createLocationQuestion();
 		}
-		//
+	}
+
+	public async getBotsCountFromDashboard(selector: string): Promise<number> {
+		await this.goToDashboardPage();
+		await this.page.waitForSelector(selector, { visible: true });
+		let botsCountText = await this.page.$eval(selector, (text) => text.innerText);
+		const botsCountBefore = botsCountText.substr(0, 2);
+		return await botsCountBefore;
+	}
+	public async goToDashboardPage(): Promise<void> {
 		await this.utils.click(SIDEMENU.SELECTORS.DASHBOARD);
-		//
-		await this.page.waitForSelector(DASHBOARD.SELECTORS.BOTS_COUNT_TEXT, { visible: true });
-		botsCountText = await this.page.$eval(DASHBOARD.SELECTORS.BOTS_COUNT_TEXT, (text) => text.innerText);
-		const botsCountAfter = botsCountText.substr(0, 2);
-		//
-		const botsCountIsRight = Number(botsCountBefore) + 10 === Number(botsCountAfter) ? true : false;
-		//
-		for (let i = 0; i < 10; i++) {
-			await this.utils.deleteBot('testBotForC282');
+	}
+	public async deleteFlowBot(botName: string, count: number = 1): Promise<void> {
+		for (let i = 0; i < count; i++) {
+			await this.utils.deleteBot(botName);
 			await this.utils.reload();
 		}
-		//
-		return botsCountIsRight;
+	}
+	public async createFlowBot(botName: string, count: number = 1): Promise<void> {
+		for (let i = 0; i < count; i++) {
+			await this.utils.createFlowBot(botName);
+		}
 	}
 
 	public async getDefaultSectionTitle(): Promise<string> {
@@ -229,9 +219,9 @@ export default class BotSection {
 		await this.utils.click(BOT_SECTION.SELECTORS.EDIT_FIRST_QUESTION);
 		await this.utils.click(BOT_SECTION.SELECTORS.REMOVE_DEFAULT_QUESTION);
 		await this.utils.type(BOT_SECTION.SELECTORS.ENTER_QUESTION_INPUT, 'What is your name?');
-		await this.page.waitFor(500);
+		await this.page.waitFor(500);//
 		await this.utils.click(BOT_SECTION.SELECTORS.QUESTION_SAVE_BUTTON);
-		await this.page.waitFor(500);
+		await this.page.waitFor(500);//
 		await this.utils.click(SIDEMENU.SELECTORS.BOTS);
 		await this.utils.clickOnBotUpdateButton('C73');
 		await this.page.waitForSelector(BOT_SECTION.SELECTORS.FIRST_QUESTION);

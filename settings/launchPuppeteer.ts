@@ -2,6 +2,7 @@ import * as puppeteer from 'puppeteer';
 
 const defaultOptions = {
     headless: false,
+    args: [ '--window-size=1080,1080' ],
     //args: ['--start-maximized'],
     //headless: true, ignoreHTTPSErrors: true
 };

@@ -43,8 +43,6 @@
         "ordered-imports": [false],
     },
     "jsRules": {
-        "max-line-length": {
-            "options": [400]
-        }
+        "max-line-length": { "options": [400] }
     }
 }

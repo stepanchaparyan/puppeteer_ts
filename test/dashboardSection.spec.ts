@@ -1,21 +1,17 @@
 import { expect } from 'chai';
-import launchPuppeteer from '../launchPuppeteer';
+import launchPuppeteer from '../settings/launchPuppeteer';
 import Dashboard from '../src/dashboardSection/dashboardPage';
 import Utils from '../src/helpers/utils';
 import LoginPage from '../src/loginSection/loginPage';
+import * as puppeteerSettings from '../settings/puppeteerSettings';
 
-let browser: any;
-let page: any;
-let loginPage: any;
-let dashboard: any;
-let utils: any;
-const viewport: any = { width: 1020, height: 1080 };
+let browser: any, page: any, loginPage: any, dashboard: any, utils: any;
 
-describe('Dashboard page elements', () => {
+describe.only('Dashboard page elements', () => {
 	before(async () => {
 		browser = await launchPuppeteer();
 		page = await browser.newPage();
-		await page.setViewport(viewport);
+		await page.setViewport(puppeteerSettings.viewport);
 		dashboard = new Dashboard(page, browser);
 		loginPage = new LoginPage(page);
 		utils = new Utils(page);

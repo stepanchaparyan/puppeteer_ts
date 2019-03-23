@@ -2,7 +2,7 @@ import * as path from 'path';
 import * as ScreenshotTester from 'puppeteer-screenshot-tester';
 import { BOT_SECTION } from '../botSection/botsSectionConstants';
 import { IFRAME } from '../botSection/iframeConstants';
-import { SIDEMENU } from '../sideMenu/sideMenuConstants';
+import { SIDEMENU } from '../sideMenuSection/sideMenuConstants';
 
 export default class Utils {
 	private page: any;
@@ -68,6 +68,20 @@ export default class Utils {
 		const botNumber = await this.getCorrespondingBotNumber(botName);
 		const botIsExist = (await this.page.$(`body > app-root > div > iox-page-container > div > iox-bots > div > div:nth-child(${botNumber}) > iox-bot-item > div > div.bot-content > div.action-buttons.btn-group > button:nth-child(3) > i`)) !== null;
 		return botIsExist;
+	}
+
+	public async getBotCount(botName: string): Promise<number> {
+		await this.reload();
+		await this.page.click(SIDEMENU.SELECTORS.BOTS);
+		await this.page.waitFor(1000); //!
+		const allBotsCount = await this.page.$$eval(BOT_SECTION.SELECTORS.ALL_BOTS, (bots) => bots.length);
+		let botCount = 0;
+		for (let i = 1; i < allBotsCount; i++) {
+			if (await this.page.$eval(`body > app-root > div > iox-page-container > div > iox-bots > div > div:nth-child(${i}) > iox-bot-item > div > div.bot-content > div.bot-name`, (bot) => bot.innerText) === 'C69') {
+				botCount++; 
+			}
+		}
+		return botCount;
 	}
 
 	public async deleteBot(botName: string): Promise<boolean> {

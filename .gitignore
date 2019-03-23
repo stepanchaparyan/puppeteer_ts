@@ -2,6 +2,7 @@
 /src/helpers/screenshots/flowBot/*.png
 /src/helpers/screenshots/NLPBot/*.png
 creds.js
+/settings/creds
 package-lock.json
 .git
 .*.swp

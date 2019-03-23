@@ -1,8 +1,8 @@
 import * as args from 'minimist';
-import * as CREDS from '../../creds';
-import * as ENVIRONMENTS from '../../environments';
+import * as CREDS from '../../settings/creds';
+import * as ENVIRONMENTS from '../../settings/environments';
 import { LOGIN_PAGE } from './loginPageConstants';
-import { SIDEMENU } from '../sideMenu/sideMenuConstants';
+import { SIDEMENU } from '../sideMenuSection/sideMenuConstants';
 
 const argv = args(process.argv.slice(2));
 

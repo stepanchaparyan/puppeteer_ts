@@ -3,15 +3,10 @@
 	"version": "0.0.1",
 	"description": "automation testing with puppeteer-mocha-chai",
 	"scripts": {
-		"test": "mocha --opts mocha.opts",
+		"test": "mocha --opts settings/mocha.opts",
 		"lint": "tslint -c tslint.json src/**/*.{ts,tsx} test/**/*.{ts,tsx} --fix --format verbose"
 	},
-	"keywords": [
-		"testing",
-		"mocha",
-		"chai",
-		"puppeteer"
-	],
+	"keywords": [ "testing", "mocha", "chai", "puppeteer" ],
 	"dependencies": {
 		"@types/chai": "^4.1.7",
 		"@types/mocha": "^5.2.6",
@@ -19,7 +14,9 @@
 		"chai": "^4.1.2",
 		"minimist": "^1.2.0",
 		"mocha": "^4.1.0",
+		"mocha-testrail-reporter": "^1.0.12",
 		"mochawesome": "^3.1.1",
+		"mochawesome-report-generator": "^3.1.5",
 		"puppeteer": "^0.13.0",
 		"puppeteer-screenshot-tester": "^1.1.0",
 		"ts-node": "^8.0.2",

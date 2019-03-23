@@ -1,26 +1,17 @@
 import { BOT_SECTION } from '../botSection/botsSectionConstants';
 import Utils from '../helpers/utils';
-import { SIDEMENU } from '../sideMenu/sideMenuConstants';
+import { SIDEMENU } from '../sideMenuSection/sideMenuConstants';
 
 export default class FlowBot {
 	private page: any;
 	private utils: any;
 
-	constructor(page) {
+	constructor (page) {
 		this.page = page;
 		this.utils = new Utils(page);
 	}
 
-	public async createBotByImportantActionDoc(): Promise<boolean> {
-		await this.page.click(SIDEMENU.SELECTORS.BOTS);
-		await this.utils.clickOnCreateBotButton();
-		await this.utils.click(BOT_SECTION.SELECTORS.CREATE_FLOW_BOT);
-		await this.utils.click(BOT_SECTION.SELECTORS.CREATE_BOT_CONTINUE);
-		await this.utils.click(BOT_SECTION.SELECTORS.CREATE_WEB_CHAT_BOT);
-		await this.utils.type(BOT_SECTION.SELECTORS.BOT_NAME_INPUT, 'testBotIA');
-		await this.utils.click(BOT_SECTION.SELECTORS.CREATE_BOT_BUTTON_AFTER_TYPE_NAME);
-
-		// * Free text
+	public async createFreeTextQuestion (): Promise<void> {
 		await this.page.waitFor(800);
 		await this.utils.click(BOT_SECTION.SELECTORS.EDIT_FIRST_QUESTION);
 		await this.utils.click(BOT_SECTION.SELECTORS.REMOVE_DEFAULT_QUESTION);
@@ -28,12 +19,12 @@ export default class FlowBot {
 		await this.utils.click(BOT_SECTION.SELECTORS.ADD_ON);
 		await this.utils.select(BOT_SECTION.SELECTORS.CHOOSE_QUESTION_TYPE, 'Freetext Feedback');
 		await this.utils.click(BOT_SECTION.SELECTORS.QUESTION_SAVE_BUTTON);
-
-		// * Options
+	}
+	public async createOptionsQuestion (): Promise<void> {
 		await this.page.waitFor(500);
 		await this.utils.click(BOT_SECTION.SELECTORS.ADD_SUB_DIALOG);
 		await this.utils.type(BOT_SECTION.SELECTORS.ENTER_QUESTION_INPUT, 'Would you like to continue?');
-		await this.utils.click(BOT_SECTION.SELECTORS.QUESTION_SAVE_BUTTON, { delay: 100 });
+		await this.utils.click(BOT_SECTION.SELECTORS.QUESTION_SAVE_BUTTON);
 		await this.page.waitFor(500);
 		await this.utils.click(BOT_SECTION.SELECTORS.CREATE_ANSWER_Q4);
 		await this.page.waitFor(500);
@@ -44,8 +35,8 @@ export default class FlowBot {
 		await this.page.waitFor(500);
 		await this.utils.type(BOT_SECTION.SELECTORS.ADD_NEW_ANSWER_INPUT, 'No');
 		await this.utils.click(BOT_SECTION.SELECTORS.SAVE_NEW_ANSWER);
-
-		// * Multiple options
+	}
+	public async createMultipleOptionsQuestion (): Promise<void> {
 		await this.page.waitFor(500);
 		await this.utils.click(BOT_SECTION.SELECTORS.ADD_SUB_DIALOG);
 		await this.utils.type(BOT_SECTION.SELECTORS.ENTER_QUESTION_INPUT, 'You are a man or woman?');
@@ -63,8 +54,9 @@ export default class FlowBot {
 		await this.page.waitFor(500);
 		await this.utils.type(BOT_SECTION.SELECTORS.ADD_NEW_ANSWER_INPUT, 'Girl - Woman');
 		await this.utils.click(BOT_SECTION.SELECTORS.SAVE_NEW_ANSWER);
-
-		// ? new question for boy
+	}
+	public async createQuestionForBoy (): Promise<void> {
+		//! new question for boy
 		await this.page.waitFor(500);
 		await this.utils.click(BOT_SECTION.SELECTORS.QUESTION_ON_ANSWER_BOY);
 		await this.utils.type(BOT_SECTION.SELECTORS.ENTER_QUESTION_INPUT, 'How old are you?');
@@ -72,16 +64,16 @@ export default class FlowBot {
 		await this.utils.select(BOT_SECTION.SELECTORS.CHOOSE_QUESTION_TYPE, 'Freetext Feedback');
 		await this.page.waitFor(500);
 		await this.utils.click(BOT_SECTION.SELECTORS.SAVE_NEW_ANSWER);
-
-		// * DataPicker
+	}
+	public async createDatePickerQuestion (): Promise<void> {
 		await this.page.waitFor(500);
 		await this.utils.click(BOT_SECTION.SELECTORS.ADD_SUB_DIALOG);
 		await this.utils.type(BOT_SECTION.SELECTORS.ENTER_QUESTION_INPUT, 'When is your birthday?');
 		await this.utils.click(BOT_SECTION.SELECTORS.ADD_ON);
 		await this.utils.select(BOT_SECTION.SELECTORS.CHOOSE_QUESTION_TYPE, 'Datepicker');
 		await this.utils.click(BOT_SECTION.SELECTORS.QUESTION_SAVE_BUTTON);
-
-		// * Location
+	}
+	public async createLocationQuestion (): Promise<void> {
 		await this.page.waitFor(500);
 		await this.utils.click(BOT_SECTION.SELECTORS.ADD_SUB_DIALOG);
 		await this.utils.type(BOT_SECTION.SELECTORS.ENTER_QUESTION_INPUT, 'Where are you from?');
@@ -89,15 +81,16 @@ export default class FlowBot {
 		await this.utils.select(BOT_SECTION.SELECTORS.CHOOSE_QUESTION_TYPE, 'Location picker');
 		await this.page.waitFor(500);
 		await this.utils.click(BOT_SECTION.SELECTORS.QUESTION_SAVE_BUTTON);
-
+	}
+	public async createQuestionForGirl (): Promise<void> {
 		// new question for girl
 		await this.page.waitFor(500);
 		await this.utils.click(BOT_SECTION.SELECTORS.QUESTION_ON_ANSWER_GIRL);
 		await this.page.waitFor(500);
 		await this.utils.type(BOT_SECTION.SELECTORS.FILL_WITH_EXISTING_QUESTION, 'Where are you from?');
 		await this.utils.click(BOT_SECTION.SELECTORS.QUESTION_SAVE_BUTTON);
-
-		// * URL
+	}
+	public async createURLQuestion (): Promise<void> {
 		await this.page.waitFor(500);
 		await this.utils.click(BOT_SECTION.SELECTORS.ADD_SUB_DIALOG);
 		await this.utils.type(BOT_SECTION.SELECTORS.ENTER_QUESTION_INPUT, 'This is the form for your profile:');
@@ -110,8 +103,8 @@ export default class FlowBot {
 		await this.utils.click(BOT_SECTION.SELECTORS.URL_CHECK_QUERY);
 		await this.utils.type(BOT_SECTION.SELECTORS.URL_INPUT_FOR_PATH_PARAMETER2, 'datepicker_option_1');
 		await this.utils.click(BOT_SECTION.SELECTORS.QUESTION_SAVE_BUTTON);
-
-		// * Slider custom
+	}
+	public async createCustomSliderQuestion (): Promise<void> {
 		await this.page.waitFor(500);
 		await this.page.click(BOT_SECTION.SELECTORS.ADD_SUB_DIALOG);
 		await this.page.type(BOT_SECTION.SELECTORS.ENTER_QUESTION_INPUT, 'Please choose your IQ level from 1 to 100');
@@ -155,8 +148,8 @@ export default class FlowBot {
 		await this.page.type(BOT_SECTION.SELECTORS.SLIDER_CUSTOM_VALUE_5, 'super clever');
 		await this.page.type(BOT_SECTION.SELECTORS.SLIDER_CUSTOM_DEFAULT_VALUE, '50');
 		await this.page.click(BOT_SECTION.SELECTORS.QUESTION_SAVE_BUTTON);
-
-		// * Slider
+	}
+	public async createSliderQuestion (): Promise<void> {
 		await this.page.waitFor(500);
 		await this.page.click(BOT_SECTION.SELECTORS.ADD_SUB_DIALOG);
 		await this.page.type(BOT_SECTION.SELECTORS.ENTER_QUESTION_INPUT, 'Please mark the bot from 1 to 10');
@@ -181,6 +174,19 @@ export default class FlowBot {
 		await this.page.keyboard.down('Backspace');
 		await this.page.type(BOT_SECTION.SELECTORS.SLIDER_DEFAULT_INPUT, '5');
 		await this.page.click(BOT_SECTION.SELECTORS.QUESTION_SAVE_BUTTON);
+	}
+	public async createBotByImportantActionDoc (): Promise<boolean> {
+		await this.utils.createFlowBot('SmokeTest');
+		await this.createFreeTextQuestion();
+		await this.createOptionsQuestion();
+		await this.createMultipleOptionsQuestion();
+		await this.createQuestionForBoy();
+		await this.createDatePickerQuestion();
+		await this.createLocationQuestion();
+		await this.createQuestionForGirl();
+		await this.createURLQuestion();
+		await this.createCustomSliderQuestion();
+		await this.createSliderQuestion();
 
 		// * Search
 		// await this.page.waitFor(500);
@@ -208,7 +214,7 @@ export default class FlowBot {
 		// await this.page.waitFor(1000);
 		// await this.page.click('body > app-root > div > iox-page-container > div > iox-create > div > iox-conversation-tree > div > div.conversation-page > div > tree > tree-internal > ul > li > tree-internal:nth-child(10) > ul > li > div > div.node-value.ng-star-inserted > div > div > button.btn.btn-info.btn-xs.pull-right > span');
 		// await this.page.waitFor(1000);
-	
+
 		// await this.page.evaluate(() => {
 		// 	document.querySelector('body > app-root > div > iox-page-container > div > iox-create > div > iox-conversation-tree > div > div.conversation-page > div > tree > tree-internal > ul > li > tree-internal:nth-child(9) > ul > li > tree-internal > ul > li > div > div.node-value.ng-star-inserted > div > div > button.btn.btn-primary.btn-xs.pull-right > span')
 		// 	.scrollIntoView();
@@ -221,13 +227,12 @@ export default class FlowBot {
 		return true;
 	}
 
-	public async test(): Promise<boolean> {
+	public async test (): Promise<boolean> {
 		await this.utils.click(SIDEMENU.SELECTORS.DROPDOWN);
 		await this.utils.click('body > app-root > div > iox-side-menu > div > div.ng-tns-c2-0 > div > div > ul > li:nth-child(2) > a');
 		await this.page.waitFor(2000);
 
-		await this.page.waitForFunction(
-			'document.querySelector("#profile > iox-registration > div > div > form > div:nth-child(1) > div:nth-child(1) > input").value == "Stepan";');
+		await this.page.waitForFunction('document.querySelector("#profile > iox-registration > div > div > form > div:nth-child(1) > div:nth-child(1) > input").value == "Stepan";');
 
 		return true;
 	}

@@ -1,19 +1,16 @@
 import { expect } from 'chai';
-import launchPuppeteer from '../launchPuppeteer';
+import launchPuppeteer from '../settings/launchPuppeteer';
 import LoginPage from '../src/loginSection/loginPage';
-import SideMenu from '../src/sideMenu/sideMenuPage';
+import SideMenu from '../src/sideMenuSection/sideMenuPage';
+import * as puppeteerSettings from '../settings/puppeteerSettings';
 
-let browser;
-let page;
-let loginPage;
-let sideMenu;
-const viewport = { width: 920, height: 1080 };
+let browser: any, page: any, loginPage: any, sideMenu: any;
 
 describe('Side Menu', () => {
 	before(async () => {
 		browser = await launchPuppeteer();
 		page = await browser.newPage();
-		await page.setViewport(viewport);
+		await page.setViewport(puppeteerSettings.viewport);
 		sideMenu = new SideMenu(page);
 		loginPage = new LoginPage(page);
 		await loginPage.open();
