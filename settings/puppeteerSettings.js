@@ -1,3 +1,3 @@
 module.exports = {
-    viewport: { width: 1080, height: 1080 }
+    viewport: { width: 1000, height: 1050 }
 };

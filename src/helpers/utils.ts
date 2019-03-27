@@ -64,10 +64,26 @@ export default class Utils {
 	}
 
 	public async botIsExist(botName: string): Promise<boolean> {
+		await this.page.click(SIDEMENU.SELECTORS.BOTS);
 		await this.reload();
 		const botNumber = await this.getCorrespondingBotNumber(botName);
 		const botIsExist = (await this.page.$(`body > app-root > div > iox-page-container > div > iox-bots > div > div:nth-child(${botNumber}) > iox-bot-item > div > div.bot-content > div.action-buttons.btn-group > button:nth-child(3) > i`)) !== null;
+		// back to this Bot page
+		if (botIsExist === true) {
+			await this.clickOnBotUpdateButton(botName);
+		}
 		return botIsExist;
+	}
+
+	public async botIsTrained(botName: string): Promise<boolean> {
+		await this.click(SIDEMENU.SELECTORS.BOTS);
+		await this.page.waitFor(1000); //!500
+		const botNumber = await this.getCorrespondingBotNumber(botName);
+		await this.page.waitFor(1000); //!
+		const checkbox = await this.page.$(`body > app-root > div > iox-page-container > div > iox-bots > div > div:nth-child(${botNumber}) > iox-bot-item > div > div.bot-content > div.status-bar > i`);
+		const className = await checkbox.getProperty('className');
+		const classNameIncludescheck = String(className).includes('check');
+		return classNameIncludescheck;
 	}
 
 	public async getBotCount(botName: string): Promise<number> {
@@ -84,15 +100,44 @@ export default class Utils {
 		return botCount;
 	}
 
-	public async deleteBot(botName: string): Promise<boolean> {
-		await this.page.waitForSelector(SIDEMENU.SELECTORS.BOTS);
+	public async deleteBot(botName: string): Promise<void> {
+		await this.page.waitFor(500);
+		await this.page.click(SIDEMENU.SELECTORS.BOTS);
+		await this.clickOnBotDeleteButton(botName);
+		//await this.page.waitForSelector(BOT_SECTION.SELECTORS.YES_BUTTON_ON_DELETE);
+		await this.page.click(BOT_SECTION.SELECTORS.YES_BUTTON_ON_DELETE);
+		await this.page.waitFor(500); //?
+	}
+	public async deleteNotTrainedBotAndGetTextFromAlert(botName: string): Promise<string> {
+		await this.page.waitFor(500);
+		await this.page.click(SIDEMENU.SELECTORS.BOTS);
+		await this.clickOnBotDeleteButton(botName);
+		const text = await this.page.$eval(BOT_SECTION.SELECTORS.DELETE_ALERT_TEXT, (text) => text.innerText);
+		await this.page.click(BOT_SECTION.SELECTORS.YES_BUTTON_ON_DELETE);
+		await this.page.waitFor(500); //?
+		return await text;
+	}
+	//! delete after test
+	public async deleteBot2(botName: string): Promise<void> {
+		await this.page.waitFor(500);
 		await this.page.click(SIDEMENU.SELECTORS.BOTS);
 		await this.clickOnBotDeleteButton(botName);
 		await this.page.waitForSelector(BOT_SECTION.SELECTORS.YES_BUTTON_ON_DELETE);
 		await this.page.click(BOT_SECTION.SELECTORS.YES_BUTTON_ON_DELETE);
-		return true;
+		await this.page.waitFor(500); //?
 	}
-
+	public async deleteTrainedBotAndGetTextFromAlert(botName: string): Promise<string> {
+		await this.page.waitFor(2000);//!
+		await this.click(SIDEMENU.SELECTORS.BOTS);
+		await this.clickOnBotDeleteButton(botName);
+		const text = await this.page.$eval(BOT_SECTION.SELECTORS.DELETE_ALERT_TEXT, (text) => text.innerText);
+		await this.page.waitForSelector(BOT_SECTION.SELECTORS.DELETE_TRAINED_BOT_INPUT);
+		await this.page.type(BOT_SECTION.SELECTORS.DELETE_TRAINED_BOT_INPUT, 'delete');
+		await this.page.waitForSelector(BOT_SECTION.SELECTORS.DELETE_TRAINED_BOT_DELETE_BUTTON);
+		await this.page.click(BOT_SECTION.SELECTORS.DELETE_TRAINED_BOT_DELETE_BUTTON, { delay: 50 });
+		await this.page.waitFor(1000);//!
+		return await text;
+	}
 	public async deleteTrainedBot(botName: string): Promise<void> {
 		await this.page.waitFor(2000);//!
 		await this.click(SIDEMENU.SELECTORS.BOTS);
@@ -102,14 +147,13 @@ export default class Utils {
 		await this.page.waitForSelector(BOT_SECTION.SELECTORS.DELETE_TRAINED_BOT_DELETE_BUTTON);
 		await this.page.click(BOT_SECTION.SELECTORS.DELETE_TRAINED_BOT_DELETE_BUTTON, { delay: 50 });
 		await this.page.waitFor(1000);//!
-
 	}
 
 	public async integrateBotToGoogle(): Promise<void> {
 		await this.page.waitForSelector(BOT_SECTION.SELECTORS.INTEGRATE);
 		await this.page.click(BOT_SECTION.SELECTORS.INTEGRATE);
 		await this.page.waitForSelector(BOT_SECTION.SELECTORS.CHECHBOX_GOOGLE_HOME);
-		await this.page.click(BOT_SECTION.SELECTORS.CHECHBOX_GOOGLE_HOME, { delay: 50 });
+		await this.page.click(BOT_SECTION.SELECTORS.CHECHBOX_GOOGLE_HOME);
 		await this.page.waitForSelector(BOT_SECTION.SELECTORS.GOOGLE_HOME_INPUT_1);
 		await this.page.type(BOT_SECTION.SELECTORS.GOOGLE_HOME_INPUT_1, 'newagent-4dfa0');
 		await this.page.type(BOT_SECTION.SELECTORS.GOOGLE_HOME_INPUT_2, '237d84ca4fc8457c8b3cf8c4c348476b');
@@ -167,7 +211,16 @@ export default class Utils {
 	}
 
 	public async click(selector: string): Promise<void> {
-		await this.page.waitForSelector(selector);
+		//console.log('click on ', selector);
+		try {
+			await this.page.waitForSelector(selector);
+		} catch (err) {
+			if (err == 'Error: waiting failed: timeout 30000ms exceeded') {
+			throw new Error(`Error. WaitFor: ' ${selector}`)
+			} else {
+				throw err
+			}
+		}
 		await this.page.click(selector);
 	}
 	public async type(selector: string, inputText: string): Promise<void> {

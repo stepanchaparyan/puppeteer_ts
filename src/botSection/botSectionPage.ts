@@ -1,5 +1,4 @@
 import { BOT_SECTION } from './botsSectionConstants';
-import { DASHBOARD } from '../dashboardSection/dashboardConstants';
 import { SIDEMENU } from '../sideMenuSection/sideMenuConstants';
 import Utils from '../helpers/utils';
 import LoginPage from '../loginSection/loginPage';
@@ -42,6 +41,9 @@ export default class BotSection {
 	public async goToDashboardPage(): Promise<void> {
 		await this.utils.click(SIDEMENU.SELECTORS.DASHBOARD);
 	}
+	public async goToBotsPage(): Promise<void> {
+		await this.utils.click(SIDEMENU.SELECTORS.BOTS);
+	}
 	public async deleteFlowBot(botName: string, count: number = 1): Promise<void> {
 		for (let i = 0; i < count; i++) {
 			await this.utils.deleteBot(botName);
@@ -73,155 +75,59 @@ export default class BotSection {
 		return classNameIncludedActive;
 	}
 
-	public async deleteNotTrainedFlowBot(): Promise<boolean> {
-		await this.utils.createFlowBot('C6163');
-		await this.utils.deleteBot('C6163');
-		// verify that bot is deleted
-		await this.utils.click(SIDEMENU.SELECTORS.BOTS);
-		const botIsExist = await this.utils.botIsExist('C6163');
-		return !botIsExist;
-	}
-	public async cancelDeleteNotTrainedFlowBot(): Promise<boolean> {
-		await this.utils.createFlowBot('C6163');
-		// cancel deleting bot
-		await this.utils.click(SIDEMENU.SELECTORS.BOTS);
-		await this.utils.clickOnBotDeleteButton('C6163');
+	public async clickOnNoButtonOnDeleteModal(botName): Promise<void> {
+		await this.page.waitFor(1000)
+		await this.goToBotsPage();
+		await this.utils.clickOnBotDeleteButton(botName);
 		await this.utils.click(BOT_SECTION.SELECTORS.NO_BUTTON_ON_DELETE);
-		// verify that bot is NOT deleted
-		await this.utils.click(SIDEMENU.SELECTORS.BOTS);
-		const botIsNotDeleted = await this.utils.botIsExist('C6163');
-		// delete Bot
-		await this.utils.deleteBot('C6163');
-		return botIsNotDeleted;
 	}
-	public async deleteNotTrainedFlowBotNotification(): Promise<boolean> {
-		await this.utils.createFlowBot('C6163');
-		await this.utils.deleteBot('C6163');
-		await this.page.waitForSelector(BOT_SECTION.SELECTORS.DELETE_BOT_NOTIFICATION);
+
+	public async waitAndGetTextFromNotification(): Promise<string> {
+		try {
+			await this.page.waitForSelector(BOT_SECTION.SELECTORS.DELETE_BOT_NOTIFICATION);
+		} catch (err) {
+			if (err == 'Error: waiting failed: timeout 30000ms exceeded') {
+			throw new Error('Notification did not appeared')
+			} else {
+				throw err
+			}
+		}
 		const text = await this.page.$eval(BOT_SECTION.SELECTORS.DELETE_BOT_NOTIFICATION, (text) => text.innerText);
 		return text;
 	}
 
-	public async deleteTrainedFlowBotButtonDisabled(): Promise<boolean> {
-		await this.utils.createFlowBot('C6164');
-		await this.utils.trainBot();
-		// type wrong word (not 'delete') and verify that button is remain disabled
-		await this.utils.click(SIDEMENU.SELECTORS.BOTS);
-		await this.utils.clickOnBotDeleteButton('C6164');
-		const buttonIsDisabled = (await this.page.$(BOT_SECTION.SELECTORS.DISABLED_DELETE_BUTTON)) !== null;
-		await this.utils.type(BOT_SECTION.SELECTORS.DELETE_TRAINED_BOT_INPUT, 'de');
-		const buttonIsStillDisabled = (await this.page.$(BOT_SECTION.SELECTORS.DISABLED_DELETE_BUTTON)) !== null;
-		await this.utils.click(BOT_SECTION.SELECTORS.CANCEL_BUTTON_ON_DELETE);
-		return buttonIsStillDisabled;
-	}
-	public async deleteTrainedFlowBotCancel(): Promise<boolean> {
-		// cancel deleting Bot
-		await this.utils.click(SIDEMENU.SELECTORS.BOTS);
-		await this.utils.clickOnBotDeleteButton('C6164');
-		await this.utils.click(BOT_SECTION.SELECTORS.CANCEL_BUTTON_ON_DELETE);
-		// verify that bot is NOT deleted
-		await this.utils.click(SIDEMENU.SELECTORS.BOTS);
-		const botIsExist = await this.utils.botIsExist('C6164');
-		return botIsExist;
-	}
-	public async deleteTrainedFlowBot(): Promise<boolean> {
-		await this.utils.deleteTrainedBot('C6164');
-		await this.page.waitForSelector(BOT_SECTION.SELECTORS.DELETE_BOT_NOTIFICATION);
-		// verify that bot is deleted
-		await this.utils.click(SIDEMENU.SELECTORS.BOTS);
-		const botIsExist = await this.utils.botIsExist('C6164');
-		return !botIsExist;
-	}
-	public async deleteTrainedFlowBotNotification(): Promise<boolean> {
-		await this.utils.createFlowBot('C6164');
-		await this.utils.trainBot();
-		await this.utils.deleteTrainedBot('C6164');
-		await this.page.waitForSelector(BOT_SECTION.SELECTORS.DELETE_BOT_NOTIFICATION);
-		const text = await this.page.$eval(BOT_SECTION.SELECTORS.DELETE_BOT_NOTIFICATION, (text) => text.innerText);
-		return text;
+	public async writeWrongWordInBotDeleteInput(wrongWord): Promise<void> {
+		await this.utils.type(BOT_SECTION.SELECTORS.DELETE_TRAINED_BOT_INPUT, wrongWord);
 	}
 
-	public async deleteNotTrainedNLPBot(): Promise<boolean> {
-		await this.utils.createNLPBot('C6165');
-		await this.utils.deleteBot('C6165');
-		// verify that bot is deleted
-		await this.utils.click(SIDEMENU.SELECTORS.BOTS);
-		const botIsExist = await this.utils.botIsExist('C6165');
-		return !botIsExist;
-	}
-	public async cancelDeleteNotTrainedNLPBot(): Promise<boolean> {
-		await this.utils.createNLPBot('C6165');
-		// cancel deleting Bot
-		await this.utils.click(SIDEMENU.SELECTORS.BOTS);
-		await this.utils.clickOnBotDeleteButton('C6165');
-		await this.utils.click(BOT_SECTION.SELECTORS.NO_BUTTON_ON_DELETE);
-		// verify that bot is NOT deleted
-		await this.utils.click(SIDEMENU.SELECTORS.BOTS);
-		const botIsNotDeleted = await this.utils.botIsExist('C6165');
-		// delete Bot
-		await this.utils.deleteBot('C6165');
-		return botIsNotDeleted;
-	}
-	public async deleteNotTrainedNLPBotNotification(): Promise<boolean> {
-		await this.utils.createNLPBot('C6165');
-		await this.utils.deleteBot('C6165');
-		await this.page.waitForSelector(BOT_SECTION.SELECTORS.DELETE_BOT_NOTIFICATION);
-		const text = await this.page.$eval(BOT_SECTION.SELECTORS.DELETE_BOT_NOTIFICATION, (text) => text.innerText);
-		return text;
+	public async clickOnCancelButtonOnTrainedBotDeleteModal(): Promise<void> {
+		await this.utils.click(BOT_SECTION.SELECTORS.CANCEL_BUTTON_ON_DELETE);
 	}
 
-	public async deleteTrainedNLPBotButtonDisabled(): Promise<boolean> {
-		await this.utils.createNLPBot('C6166');
-		await this.utils.integrateBotToGoogle();
-		await this.utils.trainBot();
-		// type wrong word (not 'delete') and verify that button is remain disabled
-		await this.utils.click(SIDEMENU.SELECTORS.BOTS);
-		await this.utils.clickOnBotDeleteButton('C6166');
-		const buttonIsDisabled = (await this.page.$(BOT_SECTION.SELECTORS.DISABLED_DELETE_BUTTON)) !== null;
-		await this.utils.type(BOT_SECTION.SELECTORS.DELETE_TRAINED_BOT_INPUT, 'de');
-		const buttonIsStillDisabled = (await this.page.$(BOT_SECTION.SELECTORS.DISABLED_DELETE_BUTTON)) !== null;
-		await this.utils.click(BOT_SECTION.SELECTORS.CANCEL_BUTTON_ON_DELETE);
-		return buttonIsStillDisabled;
+	public async checkButtonIsDisabledOrNo(selector: any): Promise<boolean> {
+		const buttonIsDisabled = (await this.page.$(selector)) !== null;
+		return buttonIsDisabled;
 	}
-	public async deleteTrainedNLPBotCancel(): Promise<boolean> {
-		// cancel deleting Bot
-		await this.utils.click(SIDEMENU.SELECTORS.BOTS);
-		await this.utils.clickOnBotDeleteButton('C6166');
-		await this.utils.click(BOT_SECTION.SELECTORS.CANCEL_BUTTON_ON_DELETE);
-		// verify that bot is NOT deleted
-		await this.utils.click(SIDEMENU.SELECTORS.BOTS);
-		const botIsExist = await this.utils.botIsExist('C6166');
-		return botIsExist;
+
+	public async checkDeleteButtonIsDisableOrNo(botname:any): Promise<boolean> {
+		await this.goToBotsPage();
+		await this.utils.clickOnBotDeleteButton(botname);
+		const buttonIsDisabled = await this.checkButtonIsDisabledOrNo(BOT_SECTION.SELECTORS.DISABLED_DELETE_BUTTON);
+		return buttonIsDisabled;
 	}
-	public async deleteTrainedNLPBot(): Promise<boolean> {
-		await this.utils.deleteTrainedBot('C6166');
-		await this.page.waitForSelector(BOT_SECTION.SELECTORS.DELETE_BOT_NOTIFICATION);
-		// verify that bot is deleted
-		await this.utils.click(SIDEMENU.SELECTORS.BOTS);
-		const botIsExist = await this.utils.botIsExist('C6166');
-		return !botIsExist;
-	}
-	public async deleteTrainedNLPBotNotification(): Promise<boolean> {
-		await this.utils.createNLPBot('C6166');
-		await this.utils.integrateBotToGoogle();
-		await this.utils.trainBot();
-		await this.utils.deleteTrainedBot('C6166');
-		await this.page.waitForSelector(BOT_SECTION.SELECTORS.DELETE_BOT_NOTIFICATION);
-		const text = await this.page.$eval(BOT_SECTION.SELECTORS.DELETE_BOT_NOTIFICATION, (text) => text.innerText);
-		await this.page.reload();
-		return text;
-	}
-	public async updateBot(): Promise<boolean> {
-		await this.utils.createFlowBot('C73');
+
+	public async updateInitialQuestionToFreeTextQuestion(): Promise<void> {
+		await this.page.waitFor(500);
 		await this.utils.click(SIDEMENU.SELECTORS.BOTS);
 		await this.utils.clickOnBotUpdateButton('C73');
-		// * Free text
 		await this.utils.click(BOT_SECTION.SELECTORS.EDIT_FIRST_QUESTION);
 		await this.utils.click(BOT_SECTION.SELECTORS.REMOVE_DEFAULT_QUESTION);
 		await this.utils.type(BOT_SECTION.SELECTORS.ENTER_QUESTION_INPUT, 'What is your name?');
-		await this.page.waitFor(500);//
+		await this.page.waitFor(500);
 		await this.utils.click(BOT_SECTION.SELECTORS.QUESTION_SAVE_BUTTON);
-		await this.page.waitFor(500);//
+		await this.page.waitFor(500);
+	}
+	public async getTextFromFirstQuestion(): Promise<boolean> {
 		await this.utils.click(SIDEMENU.SELECTORS.BOTS);
 		await this.utils.clickOnBotUpdateButton('C73');
 		await this.page.waitForSelector(BOT_SECTION.SELECTORS.FIRST_QUESTION);
@@ -229,4 +135,29 @@ export default class BotSection {
 		await this.utils.deleteBot('C73');
 		return text;
 	}
+
+	public async goToIntegratePage(): Promise<void> {
+		await this.utils.click(BOT_SECTION.SELECTORS.INTEGRATE);
+	}
+	public async clickOnMagentoCheckbox(): Promise<void> {
+		await this.page.waitFor(1000);
+		await this.utils.click(BOT_SECTION.SELECTORS.CHECHBOX_MAGENTO);
+	}
+	public async clickOnLinkOnAlert(): Promise<void> {
+		await this.page.waitFor(2000);
+		await this.utils.click(BOT_SECTION.SELECTORS.API_CONNECTOR_SETTING_LINK_ON_ALERT);
+		//await this.page.waitFor(2000);
+	}
+	public async generateKeyAndReturn(): Promise<void> {
+		await this.utils.click(BOT_SECTION.SELECTORS.GENERATE_KEY_BUTTON);
+		// wait until key generate
+		await this.page.waitFor(5000);
+		//await this.page.waitForFunction(`document.querySelector('body > app-root > div > iox-page-container > div > iox-dashboard > div > div.col-lg-7.col-md-7.col-sm-12.col-xs-12.dashboard-column-left > div:nth-child(1) > div > span').innerText > 0;`);
+		//GENERATED_PRIVATE_KEY_TEXT);
+		await this.utils.click(BOT_SECTION.SELECTORS.X_BUTTON_ON_GENERATE_KEY_ALERT);
+		await this.goToBotsPage();
+	}
+
+
+
 }

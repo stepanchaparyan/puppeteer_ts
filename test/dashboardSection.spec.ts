@@ -7,7 +7,7 @@ import * as puppeteerSettings from '../settings/puppeteerSettings';
 
 let browser: any, page: any, loginPage: any, dashboard: any, utils: any;
 
-describe.only('Dashboard page elements', () => {
+describe('Dashboard page elements', () => {
 	before(async () => {
 		browser = await launchPuppeteer();
 		page = await browser.newPage();
@@ -95,7 +95,7 @@ describe.only('Dashboard page elements', () => {
 			expect(await dashboard.platformStatusText()).to.equal(' Platform Status');
 		});
 		it('platforms list', async () => {
-			expect(await dashboard.platformsList()).to.deep.equal([ ' Core', ' Api', ' Email', ' WebChat', ' SMS', ' Facebook', ' WhatsApp', ' Slack' ]);
+			expect(await dashboard.platformsList()).to.deep.equal([ ' Core', ' Api', ' Email', ' WebChat', ' SMS', ' Facebook', 'WhatsApp', ' Slack' ]);
 		});
 		it('having troubles text', async () => {
 			expect(await dashboard.troublesText()).to.equal(' Having troubles? Contact us.');

@@ -11,36 +11,39 @@ export default class FlowBot {
 		this.utils = new Utils(page);
 	}
 
-	public async createFreeTextQuestion (): Promise<void> {
+	public async createFreeTextQuestion (): Promise<boolean> {
 		await this.page.waitFor(800);
 		await this.utils.click(BOT_SECTION.SELECTORS.EDIT_FIRST_QUESTION);
 		await this.utils.click(BOT_SECTION.SELECTORS.REMOVE_DEFAULT_QUESTION);
 		await this.utils.type(BOT_SECTION.SELECTORS.ENTER_QUESTION_INPUT, 'What is your name?');
 		await this.utils.click(BOT_SECTION.SELECTORS.ADD_ON);
 		await this.utils.select(BOT_SECTION.SELECTORS.CHOOSE_QUESTION_TYPE, 'Freetext Feedback');
+		await this.page.waitFor(500);
 		await this.utils.click(BOT_SECTION.SELECTORS.QUESTION_SAVE_BUTTON);
+		return await true;
 	}
-	public async createOptionsQuestion (): Promise<void> {
+	public async createOptionsQuestion (): Promise<boolean> {
 		await this.page.waitFor(500);
 		await this.utils.click(BOT_SECTION.SELECTORS.ADD_SUB_DIALOG);
 		await this.utils.type(BOT_SECTION.SELECTORS.ENTER_QUESTION_INPUT, 'Would you like to continue?');
 		await this.utils.click(BOT_SECTION.SELECTORS.QUESTION_SAVE_BUTTON);
 		await this.page.waitFor(500);
-		await this.utils.click(BOT_SECTION.SELECTORS.CREATE_ANSWER_Q4);
+		await this.page.click(BOT_SECTION.SELECTORS.CREATE_ANSWER_Q4);
 		await this.page.waitFor(500);
-		await this.utils.type(BOT_SECTION.SELECTORS.ADD_NEW_ANSWER_INPUT, 'Yes');
+		await this.page.type(BOT_SECTION.SELECTORS.ADD_NEW_ANSWER_INPUT, 'Yes');
 		await this.utils.click(BOT_SECTION.SELECTORS.SAVE_NEW_ANSWER);
 		await this.page.waitFor(500);
-		await this.utils.click(BOT_SECTION.SELECTORS.CREATE_ANSWER_Q4);
+		await this.page.click(BOT_SECTION.SELECTORS.CREATE_ANSWER_Q4);
 		await this.page.waitFor(500);
-		await this.utils.type(BOT_SECTION.SELECTORS.ADD_NEW_ANSWER_INPUT, 'No');
-		await this.utils.click(BOT_SECTION.SELECTORS.SAVE_NEW_ANSWER);
+		await this.page.type(BOT_SECTION.SELECTORS.ADD_NEW_ANSWER_INPUT, 'No');
+		await this.page.click(BOT_SECTION.SELECTORS.SAVE_NEW_ANSWER);
+		return await true;
 	}
-	public async createMultipleOptionsQuestion (): Promise<void> {
+	public async createMultipleOptionsQuestion (): Promise<boolean> {
 		await this.page.waitFor(500);
-		await this.utils.click(BOT_SECTION.SELECTORS.ADD_SUB_DIALOG);
+		await this.page.click(BOT_SECTION.SELECTORS.ADD_SUB_DIALOG);
 		await this.utils.type(BOT_SECTION.SELECTORS.ENTER_QUESTION_INPUT, 'You are a man or woman?');
-		await this.utils.click(BOT_SECTION.SELECTORS.ADD_ON);
+		await this.page.click(BOT_SECTION.SELECTORS.ADD_ON);
 		await this.page.waitFor(500);
 		await this.utils.select(BOT_SECTION.SELECTORS.CHOOSE_QUESTION_TYPE, 'Multiple Options');
 		await this.utils.click(BOT_SECTION.SELECTORS.QUESTION_SAVE_BUTTON);
@@ -54,8 +57,9 @@ export default class FlowBot {
 		await this.page.waitFor(500);
 		await this.utils.type(BOT_SECTION.SELECTORS.ADD_NEW_ANSWER_INPUT, 'Girl - Woman');
 		await this.utils.click(BOT_SECTION.SELECTORS.SAVE_NEW_ANSWER);
+		return await true;
 	}
-	public async createQuestionForBoy (): Promise<void> {
+	public async createQuestionForBoy (): Promise<boolean> {
 		//! new question for boy
 		await this.page.waitFor(500);
 		await this.utils.click(BOT_SECTION.SELECTORS.QUESTION_ON_ANSWER_BOY);
@@ -64,33 +68,37 @@ export default class FlowBot {
 		await this.utils.select(BOT_SECTION.SELECTORS.CHOOSE_QUESTION_TYPE, 'Freetext Feedback');
 		await this.page.waitFor(500);
 		await this.utils.click(BOT_SECTION.SELECTORS.SAVE_NEW_ANSWER);
+		return await true;
 	}
-	public async createDatePickerQuestion (): Promise<void> {
+	public async createDatePickerQuestion (): Promise<boolean> {
 		await this.page.waitFor(500);
 		await this.utils.click(BOT_SECTION.SELECTORS.ADD_SUB_DIALOG);
 		await this.utils.type(BOT_SECTION.SELECTORS.ENTER_QUESTION_INPUT, 'When is your birthday?');
 		await this.utils.click(BOT_SECTION.SELECTORS.ADD_ON);
 		await this.utils.select(BOT_SECTION.SELECTORS.CHOOSE_QUESTION_TYPE, 'Datepicker');
 		await this.utils.click(BOT_SECTION.SELECTORS.QUESTION_SAVE_BUTTON);
+		return await true;
 	}
-	public async createLocationQuestion (): Promise<void> {
+	public async createLocationQuestion (): Promise<boolean> {
 		await this.page.waitFor(500);
-		await this.utils.click(BOT_SECTION.SELECTORS.ADD_SUB_DIALOG);
-		await this.utils.type(BOT_SECTION.SELECTORS.ENTER_QUESTION_INPUT, 'Where are you from?');
-		await this.utils.click(BOT_SECTION.SELECTORS.ADD_ON);
-		await this.utils.select(BOT_SECTION.SELECTORS.CHOOSE_QUESTION_TYPE, 'Location picker');
+		await this.page.click(BOT_SECTION.SELECTORS.ADD_SUB_DIALOG);
+		await this.page.type(BOT_SECTION.SELECTORS.ENTER_QUESTION_INPUT, 'Where are you from?');
+		await this.page.click(BOT_SECTION.SELECTORS.ADD_ON);
+		await this.page.select(BOT_SECTION.SELECTORS.CHOOSE_QUESTION_TYPE, 'Location picker');
 		await this.page.waitFor(500);
-		await this.utils.click(BOT_SECTION.SELECTORS.QUESTION_SAVE_BUTTON);
+		await this.page.click(BOT_SECTION.SELECTORS.QUESTION_SAVE_BUTTON);
+		return await true;
 	}
-	public async createQuestionForGirl (): Promise<void> {
+	public async createQuestionForGirl (): Promise<boolean> {
 		// new question for girl
 		await this.page.waitFor(500);
-		await this.utils.click(BOT_SECTION.SELECTORS.QUESTION_ON_ANSWER_GIRL);
+		await this.page.click(BOT_SECTION.SELECTORS.QUESTION_ON_ANSWER_GIRL);
 		await this.page.waitFor(500);
-		await this.utils.type(BOT_SECTION.SELECTORS.FILL_WITH_EXISTING_QUESTION, 'Where are you from?');
-		await this.utils.click(BOT_SECTION.SELECTORS.QUESTION_SAVE_BUTTON);
+		await this.page.type(BOT_SECTION.SELECTORS.FILL_WITH_EXISTING_QUESTION, 'Where are you from?');
+		await this.page.click(BOT_SECTION.SELECTORS.QUESTION_SAVE_BUTTON);
+		return await true;
 	}
-	public async createURLQuestion (): Promise<void> {
+	public async createURLQuestion (): Promise<boolean> {
 		await this.page.waitFor(500);
 		await this.utils.click(BOT_SECTION.SELECTORS.ADD_SUB_DIALOG);
 		await this.utils.type(BOT_SECTION.SELECTORS.ENTER_QUESTION_INPUT, 'This is the form for your profile:');
@@ -103,8 +111,9 @@ export default class FlowBot {
 		await this.utils.click(BOT_SECTION.SELECTORS.URL_CHECK_QUERY);
 		await this.utils.type(BOT_SECTION.SELECTORS.URL_INPUT_FOR_PATH_PARAMETER2, 'datepicker_option_1');
 		await this.utils.click(BOT_SECTION.SELECTORS.QUESTION_SAVE_BUTTON);
+		return await true;
 	}
-	public async createCustomSliderQuestion (): Promise<void> {
+	public async createCustomSliderQuestion (): Promise<boolean> {
 		await this.page.waitFor(500);
 		await this.page.click(BOT_SECTION.SELECTORS.ADD_SUB_DIALOG);
 		await this.page.type(BOT_SECTION.SELECTORS.ENTER_QUESTION_INPUT, 'Please choose your IQ level from 1 to 100');
@@ -148,8 +157,9 @@ export default class FlowBot {
 		await this.page.type(BOT_SECTION.SELECTORS.SLIDER_CUSTOM_VALUE_5, 'super clever');
 		await this.page.type(BOT_SECTION.SELECTORS.SLIDER_CUSTOM_DEFAULT_VALUE, '50');
 		await this.page.click(BOT_SECTION.SELECTORS.QUESTION_SAVE_BUTTON);
+		return await true;
 	}
-	public async createSliderQuestion (): Promise<void> {
+	public async createSliderQuestion (): Promise<boolean> {
 		await this.page.waitFor(500);
 		await this.page.click(BOT_SECTION.SELECTORS.ADD_SUB_DIALOG);
 		await this.page.type(BOT_SECTION.SELECTORS.ENTER_QUESTION_INPUT, 'Please mark the bot from 1 to 10');
@@ -174,6 +184,7 @@ export default class FlowBot {
 		await this.page.keyboard.down('Backspace');
 		await this.page.type(BOT_SECTION.SELECTORS.SLIDER_DEFAULT_INPUT, '5');
 		await this.page.click(BOT_SECTION.SELECTORS.QUESTION_SAVE_BUTTON);
+		return await true;
 	}
 	public async createBotByImportantActionDoc (): Promise<boolean> {
 		await this.utils.createFlowBot('SmokeTest');
