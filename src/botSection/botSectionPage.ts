@@ -69,7 +69,8 @@ export default class BotSection {
 		}
 	}
 
-	public async integrateBotToGoogle(): Promise<void> {
+	public async integrateBotToGoogle(botName: string): Promise<void> {
+		await this.clickOnBotUpdateButton(botName); //
 		await this.page.waitForSelector(BOT_SECTION.SELECTORS.INTEGRATE);
 		await this.page.click(BOT_SECTION.SELECTORS.INTEGRATE);
 		await this.page.waitForSelector(BOT_SECTION.SELECTORS.CHECHBOX_GOOGLE_HOME);
@@ -81,7 +82,9 @@ export default class BotSection {
 		await this.page.click(BOT_SECTION.SELECTORS.INTEGRATE_BUTTON);
 		await this.page.waitFor(2000); //! need open bug
 	}
-	public async trainBot(): Promise<void> {
+	public async trainBot(botName: string): Promise<void> {
+		await this.utils.goToBotsPage();//
+		await this.clickOnBotUpdateButton(botName); //
 		await this.page.waitFor(1000); //! 
 		await this.page.waitForSelector(BOT_SECTION.SELECTORS.RUN);
 		await this.page.click(BOT_SECTION.SELECTORS.RUN);
@@ -100,9 +103,14 @@ export default class BotSection {
 		await this.utils.click(BOT_SECTION.SELECTORS.CANCEL_BUTTON_ON_DELETE);
 	}
 	public async clickOnBotDeleteButton(botName: string): Promise<void> {
-		const botNumber = await this.utils.getCorrespondingBotNumber(botName);
-		await this.page.waitForSelector(`body > app-root > div > iox-page-container > div > iox-bots > div > div:nth-child(${botNumber}) > iox-bot-item > div > div.bot-content > div.action-buttons.btn-group > button:nth-child(3) > i`);
-		await this.page.click(`body > app-root > div > iox-page-container > div > iox-bots > div > div:nth-child(${botNumber}) > iox-bot-item > div > div.bot-content > div.action-buttons.btn-group > button:nth-child(3) > i`);
+		const botIsExist = await this.botIsExist(botName);
+		if (botIsExist) {
+			const botNumber = await this.utils.getCorrespondingBotNumber(botName);
+			await this.page.waitForSelector(`body > app-root > div > iox-page-container > div > iox-bots > div > div:nth-child(${botNumber}) > iox-bot-item > div > div.bot-content > div.action-buttons.btn-group > button:nth-child(3) > i`);
+			await this.page.click(`body > app-root > div > iox-page-container > div > iox-bots > div > div:nth-child(${botNumber}) > iox-bot-item > div > div.bot-content > div.action-buttons.btn-group > button:nth-child(3) > i`);
+		} else {
+			throw new Error(`There is not bot with name ${botName}`)
+		}
 	}
 	public async clickOnBotUpdateButton(botName: string): Promise<void> {
 		const botNumber = await this.utils.getCorrespondingBotNumber(botName);
@@ -123,9 +131,9 @@ export default class BotSection {
 		const botNumber = await this.utils.getCorrespondingBotNumber(botName);
 		const botIsExist = (await this.page.$(`body > app-root > div > iox-page-container > div > iox-bots > div > div:nth-child(${botNumber}) > iox-bot-item > div > div.bot-content > div.action-buttons.btn-group > button:nth-child(3) > i`)) !== null;
 		// back to this Bot page
-		if (botIsExist === true) {
-			await this.clickOnBotUpdateButton(botName);
-		}
+		// if (botIsExist) {
+		// 	await this.clickOnBotUpdateButton(botName);
+		// }
 		return botIsExist;
 	}
 	public async botIsTrained(botName: string): Promise<boolean> {
@@ -268,6 +276,10 @@ export default class BotSection {
 		const buttonIsDisabled = await this.checkButtonIsDisabledOrNo(BOT_SECTION.SELECTORS.DISABLED_DELETE_BUTTON);
 		return buttonIsDisabled;
 	}
+	public async checkDeleteButtonIsDisableOrNoAfterWrongWord(): Promise<boolean> {
+		const buttonIsDisabled = await this.checkButtonIsDisabledOrNo(BOT_SECTION.SELECTORS.DISABLED_DELETE_BUTTON);
+		return buttonIsDisabled;
+	}
 
 	public async updateInitialQuestionToFreeTextQuestion(): Promise<void> {
 		await this.page.waitFor(500);
@@ -289,7 +301,6 @@ export default class BotSection {
 		return text;
 	}
 
-
 	public async check_Magento(): Promise<void> {
 		await this.utils.click(SIDEMENU.SELECTORS.API_CONNECTOR_MAGENTO_CHECKBOX);
 	}
@@ -304,6 +315,7 @@ export default class BotSection {
 		await this.utils.reload();
 		await this.utils.goToDashboardPage();
 		await this.utils.goToBotsPage();
+		await this.page.waitFor(1000); //! 
 	}
 	public async tryDeleteIntegratedBot(botname: string): Promise<void> {
 		await this.page.waitFor(1000); //!
@@ -322,6 +334,7 @@ export default class BotSection {
 		await this.check_Magento();
 		await this.utils.goToBotsPage();
 		await this.clickOnBotUpdateButton(botName);
+		await this.page.waitFor(2000);
 		await this.utils.goToIntegratePage();
 		await this.page.waitFor(1500);
 		await this.utils.click(BOT_SECTION.SELECTORS.CHECKBOX_MAGENTO);

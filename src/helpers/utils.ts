@@ -54,21 +54,23 @@ export default class Utils {
 		await this.click(SIDEMENU.SELECTORS.API_CONNECTOR);
 	}
 
-	public async getCorrespondingBotNumber(botName: string): Promise<number> {
+	public async getCorrespondingBotNumber(botName: string): Promise<any> {
 		let i;
-		const botsCount = await this.page.$$eval(BOT_SECTION.SELECTORS.ALL_BOTS, (bots) => bots.length);
+		const botsCount = await this.getElementsCount(BOT_SECTION.SELECTORS.ALL_BOTS);
 		for (i = 1; i < botsCount; i++) {
-			if ((await this.page.$(`body > app-root > div > iox-page-container > div > iox-bots > div > div:nth-child(${i}) > iox-bot-item > div > div.bot-content > div.bot-name`)) !== null) {
-				const row = `body > app-root > div > iox-page-container > div > iox-bots > div > div:nth-child(${i}) > iox-bot-item > div > div.bot-content > div.bot-name`;
-				const anyNextLocation = await this.page.$eval(row, (element) => element.innerText);
-				if (anyNextLocation === botName) {
-					break;
-				}
-			}
+			const nextBotSelector = `body > app-root > div > iox-page-container > div > iox-bots > div > div:nth-child(${i}) > iox-bot-item > div > div.bot-content > div.bot-name`;
+			const nextBotName = await this.getText(nextBotSelector);
+			if (nextBotName === botName) {
+				break;
+			}			
 		}
 		return i;
 	}
 
+	public async getElementsCount(selector: string): Promise<number> {
+		const count = await this.page.$$eval(selector, (bots) => bots.length);
+		return await count;
+	}
 
 	public async becomeDeActivatedMagento(): Promise<void> {
 		// check that if the Magento activated

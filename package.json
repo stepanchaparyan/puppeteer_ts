@@ -4,6 +4,7 @@
 	"description": "automation testing with puppeteer-mocha-chai",
 	"scripts": {
 		"test": "mocha --opts settings/mocha.opts",
+		"test:TestRail": "mocha --opts settings/mochaTestRail.opts",
 		"lint": "tslint -c tslint.json src/**/*.{ts,tsx} test/**/*.{ts,tsx} --fix --format verbose"
 	},
 	"keywords": [ "testing", "mocha", "chai", "puppeteer" ],

@@ -1,0 +1,9 @@
+--require ts-node/register test/allTests.spec.ts
+--timeout 600000
+--slow 2000
+
+--recursive
+--reporter mocha-testrail-reporter
+--reporter-options domain=stepan.testrail.io,username=stepanchaparyan@gmail.com,password=shdjAuQHshIBQxV.jEuO-PZ6tIXJ.EWLT1hn4QPTL,projectId=1,suiteId=1
+--no-exit
+

@@ -49,7 +49,7 @@ describe.only('Bot section', () => {
 			// check that we created just 10 new bots
 			expect(await Number(botsCountAfter)).to.equal(Number(botsCountBefore) + 10);
 		});
-		it.only('C34 69 - Check the "Create Bot" functionality', async () => {
+		it('C34 69 - Check the "Create Bot" functionality', async () => {
 			// create 3 bots
 			await botSection.createBotsWithLocationQuestion('C69', 3);
 			// get and check that we have 3 bots with name 'C69'
@@ -67,7 +67,7 @@ describe.only('Bot section', () => {
 		it('C35 6163 - Check the "Delete Flow Bot" (not trained) functionality', async () => {
 			// create bot and check that bot is created
 			await botSection.createFlowBot('C6163');
-			expect(await botSection.botIsExist('C6163')).to.equal(true, 'C6163 Bot is not exist, create process failed');
+			expect(await botSection.botIsExist('C6163')).to.equal(true, 'C6163 Bot is not exist');
 			// click on No button on delete FlowBot Modal and check that bot is not deleted
 			await botSection.clickOnNoButtonOnDeleteModal('C6163');
 			expect(await botSection.botIsExist('C6163')).to.equal(true, 'C6163 Bot is not exist');
@@ -75,18 +75,18 @@ describe.only('Bot section', () => {
 			await botSection.deleteBot('C6163');
 			expect(await botSection.botIsExist('C6163')).to.equal(false, 'C6163 bot did not delete');
 		});
-		it.skip('C36 6164 - Check the `Delete Flow Bot` (trained) functionality', async () => {
+		it('C36 6164 - Check the `Delete Flow Bot` (trained) functionality', async () => {
 			// create bot and check that bot is created
 			await botSection.createFlowBot('C6164');
 			expect(await botSection.botIsExist('C6164')).to.equal(true, 'C6164 Bot is not exist, create process failed');
 			// train bot and check that bot is trained
-			await botSection.trainBot();
+			await botSection.trainBot('C6164');
 			expect(await botSection.botIsTrained('C6164')).to.equal(true, 'C6164 Bot is not trained, train process failed, or you have other not trained bot with same name');
 			// chack that delete button is disabled
 			expect(await botSection.checkDeleteButtonIsDisableOrNo('C6164')).to.equal(true, 'C6164, delete button is not disabled');
 			// write wrong word in delete input and check that delete button still disabled
 			await botSection.writeWrongWordInBotDeleteInput('del');
-			expect(await botSection.checkDeleteButtonIsDisableOrNo('C6164')).to.equal(true, 'C6164, delete button is not disabled after writing wrong word ');
+			expect(await botSection.checkDeleteButtonIsDisableOrNoAfterWrongWord()).to.equal(true, 'C6164, delete button is not disabled after writing wrong word ');
 			// click on cancel button
 			await botSection.clickOnCancelButtonOnTrainedBotDeleteModal();
 			// check that bot is still exist
@@ -111,15 +111,15 @@ describe.only('Bot section', () => {
 			await botSection.createNLPBot('C6166');
 			expect(await botSection.botIsExist('C6166')).to.equal(true, 'C6166 Bot is not exist, create process failed');
 			// integrate bot with Google Home
-			await botSection.integrateBotToGoogle();
+			await botSection.integrateBotToGoogle('C6166');
 			// train bot and check that bot is trained
-			await botSection.trainBot();
+			await botSection.trainBot('C6166');
 			expect(await botSection.botIsTrained('C6166')).to.equal(true, 'C6166 Bot is not trained, train process failed, or you have other not trained bot with same name');
 			// check that delete button is disabled
 			expect(await botSection.checkDeleteButtonIsDisableOrNo('C6166')).to.equal(true, 'C6166, delete button is not disabled');
 			// write wrong word in delete input and check that delete button still disabled
 			await botSection.writeWrongWordInBotDeleteInput('del');
-			expect(await botSection.checkDeleteButtonIsDisableOrNo('C6166')).to.equal(true, 'C6166, delete button is not disabled after writing wrong word ');
+			expect(await botSection.checkDeleteButtonIsDisableOrNoAfterWrongWord()).to.equal(true, 'C6166, delete button is not disabled after writing wrong word ');
 			// click on cancel button
 			await botSection.clickOnCancelButtonOnTrainedBotDeleteModal();
 			// check that bot is still exist
@@ -144,7 +144,7 @@ describe.only('Bot section', () => {
 			await botSection.createFlowBot('C6168');
 			expect(await botSection.botIsExist('C6168')).to.equal(true, 'C6168 Bot is not exist, create process failed');
 			// train bot and that bot is trained
-			await botSection.trainBot();
+			await botSection.trainBot('C6168');
 			expect(await botSection.botIsTrained('C6168')).to.equal(true, 'C6168 Bot is not trained, train process failed, or you have other not trained bot with same name');
 			// delete bot
 			await botSection.deleteTrainedBot('C6168');
@@ -165,9 +165,9 @@ describe.only('Bot section', () => {
 			await botSection.createNLPBot('C6170');
 			expect(await botSection.botIsExist('C6170')).to.equal(true, 'C6170 Bot is not exist, create process failed');
 			// integrate bot with Google Home
-			await botSection.integrateBotToGoogle();
+			await botSection.integrateBotToGoogle('C6170');
 			// train bot and check that bot is trained
-			await botSection.trainBot();
+			await botSection.trainBot('C6170');
 			expect(await botSection.botIsTrained('C6170')).to.equal(true, 'C6170 Bot is not trained, train process failed, or you have other not trained bot with same name');
 			// delete bot
 			await botSection.deleteTrainedBot('C6170');
@@ -189,7 +189,7 @@ describe.only('Bot section', () => {
 			await botSection.createFlowBot('C6172');
 			expect(await botSection.botIsExist('C6172')).to.equal(true, 'C6172 Bot is not exist, create process failed');
 			// train bot and that bot is trained
-			await botSection.trainBot();
+			await botSection.trainBot('C6172');
 			expect(await botSection.botIsTrained('C6172')).to.equal(true, 'C6172 Bot is not trained, train process failed, or you have other not trained bot with same name');
 			// delete bot and get text from alert
 			expect(await botSection.deleteTrainedBotAndGetTextFromAlert('C6172')).to.equal("This bot is deployed. If you delete it the deployed version will be deleted as well. Please type 'delete' word if you really want to delete the bot.");
@@ -206,9 +206,9 @@ describe.only('Bot section', () => {
 			await botSection.createNLPBot('C6174');
 			expect(await botSection.botIsExist('C6174')).to.equal(true, 'C6174 Bot is not exist, create process failed');
 			// integrate bot with Google Home
-			await botSection.integrateBotToGoogle();
+			await botSection.integrateBotToGoogle('C6174');
 			// train bot and check that bot is trained
-			await botSection.trainBot();
+			await botSection.trainBot('C6174');
 			expect(await botSection.botIsTrained('C6174')).to.equal(true, 'C6174 Bot is not trained, train process failed, or you have other not trained bot with same name');
 			// delete bot and get text from alert
 			expect(await botSection.deleteTrainedBotAndGetTextFromAlert('C6174')).to.equal("This bot is deployed. If you delete it the deployed version will be deleted as well. Please type 'delete' word if you really want to delete the bot.");
