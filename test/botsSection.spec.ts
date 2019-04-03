@@ -7,25 +7,41 @@ import { BOT_SECTION } from '../src/botSection/botsSectionConstants';
 import Utils from '../src/helpers/utils';
 import * as puppeteerSettings from '../settings/puppeteerSettings';
 import { SIDEMENU } from '../src/sideMenuSection/sideMenuConstants';
+import TestRail from '../src/helpers/testRailApi';
+import Fetch from '../src/helpers/fetch';
 
 let browser: any, page: any, loginPage: any, botSection: any, utils: any;
 
+let fetch:any;
 describe.only('Bot section', () => {
 	before(async () => {
 		browser = await launchPuppeteer();
 		page = await browser.newPage();
 		await page.setViewport(puppeteerSettings.viewport);
-		utils = new Utils(page);
-		botSection = new BotSection(page);
-		loginPage = new LoginPage(page);
-		await loginPage.open();
-		await loginPage.logIn();
+		//utils = new Utils(page);
+		//botSection = new BotSection(page);
+		//loginPage = new LoginPage(page);
+		//testrail = new TestRail();
+		fetch = new Fetch();
+		//await loginPage.open();
+		//await loginPage.logIn();
 	});
 	after(async () => {
 		await browser.close();
 	});
-	beforeEach(async () => {
-		await utils.reload();
+	// beforeEach(async () => {
+	// 	await utils.reload();
+	// });
+
+	context.only('TestRail Api', () => {
+		it('Simple tests', async () => {
+			//console.log('post: ', await fetch.addRun(1, 'NewNew'));
+			//console.log('get: ', await fetch.getCase(3));
+			//console.log('get: ', await fetch.getCases());
+			//console.log('get: ', await fetch.getTests(386));
+			console.log('get: ', await fetch.getResults(7868));
+			console.log('get: ', await fetch.getTestStatus(7868));
+		});
 	});
 
 	context('Open Dashboard page', () => {

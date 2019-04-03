@@ -2,4 +2,3 @@
 --timeout 600000
 --slow 2000
 
---reporter mochawesome
