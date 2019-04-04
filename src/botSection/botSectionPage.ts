@@ -15,7 +15,7 @@ export default class BotSection {
 	}
 
 	public async createFlowBot(botName: string): Promise<void> {
-		await this.page.waitForSelector(SIDEMENU.SELECTORS.BOTS);
+		await this.utils.waitForSelector(SIDEMENU.SELECTORS.BOTS);
 		await this.page.click(SIDEMENU.SELECTORS.BOTS);
 		await this.clickOnCreateBotButton();
 		await this.page.waitForSelector(BOT_SECTION.SELECTORS.CREATE_FLOW_BOT);

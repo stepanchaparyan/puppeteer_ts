@@ -7,24 +7,21 @@ import { BOT_SECTION } from '../src/botSection/botsSectionConstants';
 import Utils from '../src/helpers/utils';
 import * as puppeteerSettings from '../settings/puppeteerSettings';
 import { SIDEMENU } from '../src/sideMenuSection/sideMenuConstants';
-import TestRail from '../src/helpers/testRailApi';
-import Fetch from '../src/helpers/fetch';
+import TestRailAPI from '../src/helpers/TestRailAPI';
 
 let browser: any, page: any, loginPage: any, botSection: any, utils: any;
-
-let fetch:any;
+let testRailApi: any, runId:number; 
 describe.only('Bot section', () => {
 	before(async () => {
 		browser = await launchPuppeteer();
 		page = await browser.newPage();
 		await page.setViewport(puppeteerSettings.viewport);
-		//utils = new Utils(page);
-		//botSection = new BotSection(page);
-		//loginPage = new LoginPage(page);
-		//testrail = new TestRail();
-		fetch = new Fetch();
-		//await loginPage.open();
-		//await loginPage.logIn();
+		utils = new Utils(page);
+		botSection = new BotSection(page);
+		loginPage = new LoginPage(page);
+		testRailApi = new TestRailAPI();
+		await loginPage.open();
+		await loginPage.logIn();
 	});
 	after(async () => {
 		await browser.close();
@@ -35,20 +32,24 @@ describe.only('Bot section', () => {
 
 	context.only('TestRail Api', () => {
 		it('Simple tests', async () => {
-			//console.log('post: ', await fetch.addRun(1, 'NewNew'));
-			//console.log('get: ', await fetch.getCase(3));
-			//console.log('get: ', await fetch.getCases());
-			//console.log('get: ', await fetch.getTests(386));
-			console.log('get: ', await fetch.getResults(7868));
-			console.log('get: ', await fetch.getTestStatus(7868));
+			runId = await testRailApi.addRunWithType(1,3);
+			//console.log('getAllCases: ', await testRailApi.getAllCases(1));
+			console.log('getCasesByType: ', await testRailApi.getCasesIDsByType(1,3));
+			//console.log('testStatus: ', await testRailApi.getTestStatus(7882));
 		});
 	});
 
-	context('Open Dashboard page', () => {
+	context.only('Open Dashboard page', () => {
 		it('C32 284 - Check the Dashboard page opens after Login', async () => {
+		try {
 			expect(await botSection.getDefaultSectionTitle()).to.equal('Dashboard');
 			expect(await botSection.getDefaultSectionURL()).to.equal('dashboard');
 			expect(await botSection.checkDashboardSectionIsActive()).to.equal(true);
+			await testRailApi.addResultForCase(runId,32,1);
+		} catch (err) {
+			await testRailApi.addResultForCase(runId,32,5,String(err));
+			throw err;
+		}
 		});
 	});
 
@@ -80,7 +81,8 @@ describe.only('Bot section', () => {
 	});
 
 	context('Delete Bots', () => {
-		it('C35 6163 - Check the "Delete Flow Bot" (not trained) functionality', async () => {
+		it.only('C35 6163 - Check the "Delete Flow Bot" (not trained) functionality', async () => {
+		try {
 			// create bot and check that bot is created
 			await botSection.createFlowBot('C6163');
 			expect(await botSection.botIsExist('C6163')).to.equal(true, 'C6163 Bot is not exist');
@@ -90,6 +92,11 @@ describe.only('Bot section', () => {
 			// delete bot and check that bot is deleted
 			await botSection.deleteBot('C6163');
 			expect(await botSection.botIsExist('C6163')).to.equal(false, 'C6163 bot did not delete');
+			await testRailApi.addResultForCase(runId,35,1);
+		} catch (err) {
+			await testRailApi.addResultForCase(runId,35,5,String(err));
+			throw err;
+		}
 		});
 		it('C36 6164 - Check the `Delete Flow Bot` (trained) functionality', async () => {
 			// create bot and check that bot is created

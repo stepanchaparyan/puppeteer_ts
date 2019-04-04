@@ -20,6 +20,23 @@ export default class Utils {
 		}
 		await this.page.click(selector);
 	}
+
+	public async waitForSelector(selector: string): Promise<void> {
+		//console.log('click on ', selector);
+		try {
+			await this.page.waitForSelector(selector);
+		} catch (err) {
+			if (err == 'Error: waiting failed: timeout 30000ms exceeded') {
+				throw new Error(`WaitFor: ' ${selector}`)
+			} else if (String(err).includes('Error: Evaluation failed: DOMException: Failed to execute')) {
+				throw new Error(`Wrong Selector: ' ${selector}`)
+			} else {
+				throw err
+			}
+		}
+	}
+
+
 	public async type(selector: string, inputText: string): Promise<void> {
 		await this.page.waitForSelector(selector);
 		await this.page.type(selector, inputText);

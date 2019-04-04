@@ -4,7 +4,6 @@
 	"description": "automation testing with puppeteer-mocha-chai",
 	"scripts": {
 		"test": "mocha --opts settings/mocha.opts",
-		"test:TestRail": "mocha --opts settings/mochaTestRail.opts",
 		"lint": "tslint -c tslint.json src/**/*.{ts,tsx} test/**/*.{ts,tsx} --fix --format verbose"
 	},
 	"keywords": [
@@ -15,10 +14,12 @@
 	],
 	"dependencies": {
 		"@types/chai": "^4.1.7",
+		"@types/jsonpath": "^0.2.0",
 		"@types/mocha": "^5.2.6",
 		"@types/puppeteer": "^1.12.3",
 		"base-64": "^0.1.0",
 		"chai": "^4.1.2",
+		"jsonpath": "^1.0.1",
 		"minimist": "^1.2.0",
 		"mocha": "^4.1.0",
 		"mocha-testrail-reporter": "^1.0.12",
