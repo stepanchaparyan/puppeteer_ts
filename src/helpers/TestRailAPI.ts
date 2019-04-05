@@ -1,35 +1,43 @@
 import fetch from 'node-fetch';
 import * as base64 from 'base-64';
 import * as jp from 'jsonpath';
-import * as path from 'path';
+import * as testRail from '../../settings/testRailSettings';
 
-export default class Fetch {
-	baseUrl = 'https://stepan.testrail.io//index.php?/api/v2/';
-	username = 'stepanchaparyan@gmail.com';
-	password = 'Aram05##';
+export default class TestRailAPIs {
 	headers = {
 		Accept: 'application/json',
 		'Content-Type': 'application/json',
-		Authorization: 'Basic ' + base64.encode(this.username + ':' + this.password)
+		Authorization: 'Basic ' + base64.encode(testRail.username + ':' + testRail.password)
 	};
 
-	public async getCase (caseNumber): Promise<void> {
+	// Returns an existing test case
+	public async getCase (caseNumber): Promise<any> {
 		let method = 'get_case/';
-		//let url = path.join(`${baseUrl}`,`${method}`,`${caseNumber}`);
-		let url = this.baseUrl + method + caseNumber;
+		let url = testRail.baseUrl + method + caseNumber;
 		let options = {
 			method: 'GET',
 			headers: this.headers
 		};
 
-		let data = await fetch(url, options);
-		let main = await data.json();
-		return await main;
+		let data = fetch(url, options)
+		.then(this.handleErrors)
+		.then(response => response.json() )
+		return await data;			
 	}
 
-	public async getAllCases (projectId): Promise<void> {
+	public handleErrors(response): Promise<any> {
+		if (!response.ok) {
+			throw Error(`Provide CaseNumber is wrong`);
+		}
+		return response;
+	}
+
+
+	// Returns a list of test cases for a project
+	public async getAllCases (projectId): Promise<any> {
 		let method = 'get_cases/';
-		let url = this.baseUrl + method + projectId;
+		let url = testRail.baseUrl + method + projectId;
+		// method(get);
 		let options = {
 			method: 'GET',
 			headers: this.headers
@@ -40,10 +48,11 @@ export default class Fetch {
 		return await main;
 	}
 
+	// Returns a list of test cases for a project and case type  
 	public async getCasesIDsByType (projectId, type_id): Promise<any> {
 		let method = 'get_cases/';
 		let suite_id = '&suite_id=1&type_id=';
-		let url = this.baseUrl + method + projectId + suite_id + type_id;
+		let url = testRail.baseUrl + method + projectId + suite_id + type_id;
 		let options = {
 			method: 'GET',
 			headers: this.headers
@@ -55,9 +64,10 @@ export default class Fetch {
 		return await IDs;
 	}
 
-	public async getTests (runNumber): Promise<void> {
+	// Return all tests for a test run  
+	public async getTests (runNumber): Promise<any> {
 		let method = 'get_tests/';
-		let url = this.baseUrl + method + runNumber;
+		let url = testRail.baseUrl + method + runNumber;
 		let options = {
 			method: 'GET',
 			headers: this.headers
@@ -68,24 +78,10 @@ export default class Fetch {
 		return await main;
 	}
 
-	public async getResults (testNumber): Promise<void> {
+	// Return status for a test
+	public async getTestStatus (testNumber): Promise<any> {
 		let method = 'get_results/';
-		// also can add limit for tests
-		// also can filter test by status_id
-		let url = this.baseUrl + method + testNumber;
-		let options = {
-			method: 'GET',
-			headers: this.headers
-		};
-
-		let data = await fetch(url, options);
-		let main = await data.json();
-		return await main;
-	}
-
-	public async getTestStatus (testNumber): Promise<void> {
-		let method = 'get_results/';
-		let url = this.baseUrl + method + testNumber;
+		let url = testRail.baseUrl + method + testNumber;
 		let options = {
 			method: 'GET',
 			headers: this.headers
@@ -96,26 +92,12 @@ export default class Fetch {
 		return await main[0].status_id;
 	}
 
-	public async getResultsForCase (runNumber, caseNumber): Promise<void> {
-		let method = 'get_results_for_case/';
-		// also can add limit for tests
-		// also can filter test by status_id
-		let url = this.baseUrl + method + runNumber + '/' + caseNumber;
-		let options = {
-			method: 'GET',
-			headers: this.headers
-		};
-
-		let data = await fetch(url, options);
-		let main = await data.json();
-		return await main;
-	}
-
-	public async getResultsForRun (runNumber): Promise<void> {
+	// Returns a list of test results for a test run
+	public async getResultsForRun (runNumber): Promise<any> {
 		let method = 'get_results_for_run/';
 		// also can add limit for tests
 		// also can filter test by status_id
-		let url = this.baseUrl + method + runNumber;
+		let url = testRail.baseUrl + method + runNumber;
 		let options = {
 			method: 'GET',
 			headers: this.headers
@@ -125,7 +107,8 @@ export default class Fetch {
 		let main = await data.json();
 		return await main;
     }
-    
+	
+	// Returns run name with time
     public async getRunName(): Promise<string> {
 		const date = new Date();
 		let month, day;
@@ -176,11 +159,32 @@ export default class Fetch {
 		var fullTime = month+' '+day+' '+year+', '+hour+':'+minute;
         let runName = `Automated test run - ${fullTime}`;
         return await runName;
-    }
-
-	public async addRunWithType (project_id, type_id, suite_id = 1): Promise<void> {
+	}
+	
+	// Creates a new test run and returns run ID
+	public async addRun (project_id, suite_id = 1): Promise<any> {
 		let method = 'add_run/';
-		let url = this.baseUrl + method + project_id;
+        let url = testRail.baseUrl + method + project_id;
+		let body = {
+			name: this.getRunName(),
+			suite_id: suite_id,
+			include_all: true
+		};
+		let options = {
+			method: 'POST',
+			headers: this.headers,
+			body: JSON.stringify(body)
+		};
+
+		let data = await fetch(url, options);
+		let main = await data.json();
+		return await main.id;
+	}
+
+	// Creates a new test run for specific case type and returns run ID
+	public async addRunWithType (project_id, type_id, suite_id = 1): Promise<any> {
+		let method = 'add_run/';
+		let url = testRail.baseUrl + method + project_id;
 		let body = {
 			name: await this.getRunName(),
 			suite_id: suite_id,
@@ -198,28 +202,10 @@ export default class Fetch {
 		return await main.id;
 	}
 
-	public async addRun (project_id, suite_id = 1): Promise<void> {
-		let method = 'add_run/';
-        let url = this.baseUrl + method + project_id;
-		let body = {
-			name: this.getRunName(),
-			suite_id: suite_id,
-			include_all: true
-		};
-		let options = {
-			method: 'POST',
-			headers: this.headers,
-			body: JSON.stringify(body)
-		};
-
-		let data = await fetch(url, options);
-		let main = await data.json();
-		return await main.id;
-	}
-
-	public async addResult (testId, status_id, comment = ''): Promise<void> {
+	// Adds a new test result or comment for a test
+	public async addResult (testId, status_id, comment = ''): Promise<any> {
 		let method = 'add_result/';
-		let url = this.baseUrl + method + testId;
+		let url = testRail.baseUrl + method + testId;
 		let body = {
 			status_id: status_id,
 			comment: comment
@@ -235,42 +221,10 @@ export default class Fetch {
 		return await main;
 	}
 
-	public async addResults (runId, status_id, comment = ''): Promise<void> {
-		let method = 'add_results/';
-		let url = this.baseUrl + method + runId;
-		let body = {
-			results: [
-				{
-					test_id: 7870,
-					status_id: status_id,
-					comment: comment
-				},
-				{
-					test_id: 7871,
-					status_id: status_id,
-					comment: comment
-				},
-				{
-					test_id: 7875,
-					status_id: status_id,
-					comment: comment
-				}
-			]
-		};
-		let options = {
-			method: 'POST',
-			headers: this.headers,
-			body: JSON.stringify(body)
-		};
-
-		let data = await fetch(url, options);
-		let main = await data.json();
-		return await main;
-	}
-
-	public async addResultForCase (runId, caseId, status_id, comment = ''): Promise<void> {
+	// Adds a new test result or comment for a case
+	public async addResultForCase (runId, caseId, status_id, comment = ''): Promise<any> {
 		let method = 'add_result_for_case/';
-		let url = this.baseUrl + method + runId + '/' + caseId;
+		let url = testRail.baseUrl + method + runId + '/' + caseId;
 		let body = {
 			status_id: status_id,
 			comment: comment
@@ -286,9 +240,10 @@ export default class Fetch {
 		return await main;
 	}
 
-	public async getUsers (): Promise<void> {
+	// Returns a list of users
+	public async getUsers (): Promise<any> {
 		let method = 'get_users/';
-		let url = this.baseUrl + method;
+		let url = testRail.baseUrl + method;
 		let options = {
 			method: 'GET',
 			headers: this.headers

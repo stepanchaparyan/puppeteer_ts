@@ -20,8 +20,8 @@ describe.only('Bot section', () => {
 		botSection = new BotSection(page);
 		loginPage = new LoginPage(page);
 		testRailApi = new TestRailAPI();
-		await loginPage.open();
-		await loginPage.logIn();
+		//await loginPage.open();
+		//await loginPage.logIn();
 	});
 	after(async () => {
 		await browser.close();
@@ -30,16 +30,16 @@ describe.only('Bot section', () => {
 	// 	await utils.reload();
 	// });
 
-	context.only('TestRail Api', () => {
+	context.only('Create Run on TestRail', () => {
 		it('Simple tests', async () => {
-			runId = await testRailApi.addRunWithType(1,3);
-			//console.log('getAllCases: ', await testRailApi.getAllCases(1));
-			console.log('getCasesByType: ', await testRailApi.getCasesIDsByType(1,3));
-			//console.log('testStatus: ', await testRailApi.getTestStatus(7882));
+			//runId = await testRailApi.addRunWithType(18,13);
+			//console.log('getAllCases: ', await testRailApi.getCase(22));
+			//console.log('getCasesByType: ', await testRailApi.getCasesIDsByType(1,3));
+			console.log(await testRailApi.getCase(932));
 		});
 	});
 
-	context.only('Open Dashboard page', () => {
+	context('Open Dashboard page', () => {
 		it('C32 284 - Check the Dashboard page opens after Login', async () => {
 		try {
 			expect(await botSection.getDefaultSectionTitle()).to.equal('Dashboard');
@@ -81,7 +81,7 @@ describe.only('Bot section', () => {
 	});
 
 	context('Delete Bots', () => {
-		it.only('C35 6163 - Check the "Delete Flow Bot" (not trained) functionality', async () => {
+		it('C35 6163 - Check the "Delete Flow Bot" (not trained) functionality', async () => {
 		try {
 			// create bot and check that bot is created
 			await botSection.createFlowBot('C6163');
