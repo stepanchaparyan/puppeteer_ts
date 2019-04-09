@@ -3,6 +3,7 @@
 /src/helpers/screenshots/NLPBot/*.png
 creds.js
 /settings/creds
+/settings/testRailSettings
 package-lock.json
 .git
 .*.swp

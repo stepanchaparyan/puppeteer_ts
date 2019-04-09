@@ -1,6 +1,7 @@
 import fetch from 'node-fetch';
 import * as base64 from 'base-64';
 import * as jp from 'jsonpath';
+import * as path from 'path';
 import * as testRail from '../../settings/testRailSettings';
 
 export default class TestRailAPIs {
@@ -10,108 +11,115 @@ export default class TestRailAPIs {
 		Authorization: 'Basic ' + base64.encode(testRail.username + ':' + testRail.password)
 	};
 
-	// Returns an existing test case
-	public async getCase (caseNumber): Promise<any> {
-		let method = 'get_case/';
-		let url = testRail.baseUrl + method + caseNumber;
-		let options = {
-			method: 'GET',
-			headers: this.headers
-		};
+	async myFetch (url, options, message = '') {
+		let data = await fetch(url, options);
+		await this.handleErrors(data, message);
+		let main = await data.json();
+		return main;
+	} 
 
-		let data = fetch(url, options)
-		.then(this.handleErrors)
-		.then(response => response.json() )
-		return await data;			
-	}
-
-	public handleErrors(response): Promise<any> {
+	handleErrors(response, message) {
 		if (!response.ok) {
-			throw Error(`Provide CaseNumber is wrong`);
+			throw Error(message);
 		}
 		return response;
 	}
 
+	// Returns an existing test case
+	async getCase (caseId) {
+		const method = 'get_case/';
+		const pathname = path.join(`${method}`,`${caseId}`);
+		const url = testRail.baseUrl + pathname;
+		const options = {
+			method: 'GET',
+			headers: this.headers
+		};
+
+		const data = await this.myFetch(url, options, 'Provided case id is not valid')
+		return await data;			
+	}
 
 	// Returns a list of test cases for a project
-	public async getAllCases (projectId): Promise<any> {
-		let method = 'get_cases/';
-		let url = testRail.baseUrl + method + projectId;
-		// method(get);
-		let options = {
+	async getAllCases (projectId) {
+		const method = 'get_cases/';
+		const pathname = path.join(`${method}`,`${projectId}`);
+		const url = testRail.baseUrl + pathname;
+		const options = {
 			method: 'GET',
 			headers: this.headers
         };
         
-		let data = await fetch(url, options);
-		let main = await data.json();
-		return await main;
+		const data = await this.myFetch(url, options, 'Provided projectId is not valid')
+		return await data;	
 	}
 
 	// Returns a list of test cases for a project and case type  
-	public async getCasesIDsByType (projectId, type_id): Promise<any> {
-		let method = 'get_cases/';
-		let suite_id = '&suite_id=1&type_id=';
-		let url = testRail.baseUrl + method + projectId + suite_id + type_id;
-		let options = {
+	async getCasesIDsByType (projectId, typeId) {
+		const method = 'get_cases/';
+		const suiteId = '&suite_id=1&type_id=';
+		const pathname = path.join(`${method}`,`${projectId}`,`${suiteId}`);
+		const url = testRail.baseUrl + pathname + typeId;
+		const options = {
 			method: 'GET',
 			headers: this.headers
-        };
-        
-		let data = await fetch(url, options);
-		let main = await data.json();
-		let IDs = jp.query(main, '$..id');
+		};
+		
+		const data = await this.myFetch(url, options, 'Provide valid project ID and type ID')
+		const IDs = jp.query(data, '$..id');
 		return await IDs;
 	}
 
 	// Return all tests for a test run  
-	public async getTests (runNumber): Promise<any> {
-		let method = 'get_tests/';
-		let url = testRail.baseUrl + method + runNumber;
-		let options = {
+	async getTests (runId) {
+		const method = 'get_tests/';
+		const pathname = path.join(`${method}`,`${runId}`);
+		const url = testRail.baseUrl + pathname;
+		const options = {
 			method: 'GET',
 			headers: this.headers
 		};
 
-		let data = await fetch(url, options);
-		let main = await data.json();
-		return await main;
+		const data = await this.myFetch(url, options, 'Provides run number is not valid')
+		return await data;	
 	}
 
-	// Return status for a test
-	public async getTestStatus (testNumber): Promise<any> {
-		let method = 'get_results/';
-		let url = testRail.baseUrl + method + testNumber;
-		let options = {
+	// Returns a list of test results for a test run (except untested tests)
+	async getResultsForRun (runId) {
+		const method = 'get_results_for_run/';
+		const pathname = path.join(`${method}`,`${runId}`);
+		const url = testRail.baseUrl + pathname;
+		const options = {
 			method: 'GET',
 			headers: this.headers
 		};
 
-		let data = await fetch(url, options);
-		let main = await data.json();
-		return await main[0].status_id;
+		const data = await this.myFetch(url, options, 'Provide run ID is not valid')
+		return await data;	
 	}
-
-	// Returns a list of test results for a test run
-	public async getResultsForRun (runNumber): Promise<any> {
-		let method = 'get_results_for_run/';
-		// also can add limit for tests
-		// also can filter test by status_id
-		let url = testRail.baseUrl + method + runNumber;
-		let options = {
+	
+	//Returns a status of case
+	async getResultForCase (runId, caseId) {
+		const method = 'get_results_for_case/';
+		const pathname = path.join(`${method}`,`${runId}`,`/`,`${caseId}`);
+		const url = testRail.baseUrl + pathname;
+		const options = {
 			method: 'GET',
 			headers: this.headers
 		};
-
-		let data = await fetch(url, options);
-		let main = await data.json();
-		return await main;
-    }
+		
+		const data = await this.myFetch(url, options, 'Provide valid run ID and case ID');
+		if (data.length === 0) {
+			return undefined;
+		}
+		return await data[0].status_id;
+	}
 	
 	// Returns run name with time
-    public async getRunName(): Promise<string> {
+    async getRunName() {
 		const date = new Date();
-		let month, day;
+		let month, day, minute;
+		const getDay = date.getDate();
+		getDay < 10 ? day = `0${getDay}` : day = getDay;
 		switch (new Date().getMonth()) {
 			case 0:
 			  	month = "Jan";
@@ -149,110 +157,107 @@ export default class TestRailAPIs {
 			case 11:
 				month = "Dec";
 		}
-		let getDay = date.getDay();
-		if (getDay < 10 ) {
-			day = `0${getDay}`;
-		}
 		const year = date.getFullYear();
 		const hour = date.getHours();
-		const minute = date.getMinutes();					
-		var fullTime = month+' '+day+' '+year+', '+hour+':'+minute;
-        let runName = `Automated test run - ${fullTime}`;
+		let getMinute = date.getMinutes();		
+		getMinute < 10 ? minute = `0${getMinute}` :	minute = getMinute;
+		const fullTime = month+' '+day+' '+year+', '+hour+':'+minute;
+        const runName = `Automated test run - ${fullTime}`;
         return await runName;
 	}
 	
 	// Creates a new test run and returns run ID
-	public async addRun (project_id, suite_id = 1): Promise<any> {
-		let method = 'add_run/';
-        let url = testRail.baseUrl + method + project_id;
-		let body = {
-			name: this.getRunName(),
-			suite_id: suite_id,
+	async addRun (projectId, suiteId = 1) {
+		const method = 'add_run/';
+		const pathname = path.join(`${method}`,`${projectId}`);
+		const url = testRail.baseUrl + pathname;
+		const body = {
+			name: await this.getRunName(),
+			suite_id: suiteId,
 			include_all: true
 		};
-		let options = {
+		const options = {
 			method: 'POST',
 			headers: this.headers,
 			body: JSON.stringify(body)
 		};
 
-		let data = await fetch(url, options);
-		let main = await data.json();
-		return await main.id;
+		const data = await this.myFetch(url, options, 'Provided project ID is not valid')
+		return await data.id;
 	}
 
 	// Creates a new test run for specific case type and returns run ID
-	public async addRunWithType (project_id, type_id, suite_id = 1): Promise<any> {
-		let method = 'add_run/';
-		let url = testRail.baseUrl + method + project_id;
-		let body = {
+	async addRunWithType (project_id, type_id, suite_id = 1) {
+		const method = 'add_run/';
+		const pathname = path.join(`${method}`,`${project_id}`);
+		const url = testRail.baseUrl + pathname;
+		const body = {
 			name: await this.getRunName(),
 			suite_id: suite_id,
 			include_all: false,
 			case_ids: await this.getCasesIDsByType(project_id, type_id)
 		};
-		let options = {
+		const options = {
 			method: 'POST',
 			headers: this.headers,
 			body: JSON.stringify(body)
 		};
 
-		let data = await fetch(url, options);
-		let main = await data.json();
-		return await main.id;
+		const data = await this.myFetch(url, options, 'Provided data is not valid')
+		return await data.id;	
 	}
 
 	// Adds a new test result or comment for a test
-	public async addResult (testId, status_id, comment = ''): Promise<any> {
-		let method = 'add_result/';
-		let url = testRail.baseUrl + method + testId;
-		let body = {
-			status_id: status_id,
+	async addResult (testId, statusId, comment = '') {
+		const method = 'add_result/';
+		const pathname = path.join(`${method}`,`${testId}`);
+		const url = testRail.baseUrl + pathname;
+		const body = {
+			status_id: statusId,
 			comment: comment
 		};
-		let options = {
+		const options = {
 			method: 'POST',
 			headers: this.headers,
 			body: JSON.stringify(body)
 		};
 
-		let data = await fetch(url, options);
-		let main = await data.json();
-		return await main;
+		const data = await this.myFetch(url, options, 'Provided test ID or status Id is not valid')
+		return await data;
 	}
 
 	// Adds a new test result or comment for a case
-	public async addResultForCase (runId, caseId, status_id, comment = ''): Promise<any> {
-		let method = 'add_result_for_case/';
-		let url = testRail.baseUrl + method + runId + '/' + caseId;
-		let body = {
+	async addResultForCase (runId, caseId, status_id, comment = '') {
+		const method = 'add_result_for_case/';
+		const pathname = path.join(`${method}`,`${runId}`, `/`, `${caseId}`);
+		const url = testRail.baseUrl + pathname;
+		const body = {
 			status_id: status_id,
 			comment: comment
 		};
-		let options = {
+		const options = {
 			method: 'POST',
 			headers: this.headers,
 			body: JSON.stringify(body)
 		};
 
-		let data = await fetch(url, options);
-		let main = await data.json();
-		return await main;
+		const data = await this.myFetch(url, options, 'Provided data is not valid')
+		return await data;	
 	}
 
 	// Returns a list of users
-	public async getUsers (): Promise<any> {
-		let method = 'get_users/';
-		let url = testRail.baseUrl + method;
-		let options = {
+	async getUsers () {
+		const method = 'get_users/';
+		const url = testRail.baseUrl + method;
+		const options = {
 			method: 'GET',
 			headers: this.headers
 		};
 
-		let data = await fetch(url, options);
-		let main = await data.json();
-		return await main;
+		const data = await this.myFetch(url, options);
+		return await data;
 	}
+
 }
 
 // STATUS_ID
