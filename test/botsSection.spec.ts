@@ -7,9 +7,12 @@ import { BOT_SECTION } from '../src/botSection/botsSectionConstants';
 import Utils from '../src/helpers/utils';
 import * as puppeteerSettings from '../settings/puppeteerSettings';
 import TestRailAPI from '../src/helpers/TestRailAPI';
+import * as args from 'minimist';
 
 let browser: any, page: any, loginPage: any, botSection: any, utils: any;
 let testRailApi: any, runID:number, caseID:any;;
+const argv = args(process.argv.slice(2));
+const runWithTestRail = argv._[1] === 'TestRail' ? true : false;
 
 describe.only('Bot section', () => {
 	before(async () => {
@@ -20,9 +23,11 @@ describe.only('Bot section', () => {
 		botSection = new BotSection(page);
 		loginPage = new LoginPage(page);
 		testRailApi = new TestRailAPI();
-		runID = await testRailApi.addRunWithType(1,3);
 		await loginPage.open();
 		await loginPage.logIn();
+		if (runWithTestRail) {
+			runID = await testRailApi.addRunWithType(1,3);
+		}
 	});
 	after(async () => {
 		await browser.close();
@@ -32,8 +37,10 @@ describe.only('Bot section', () => {
 	// });
 
 	afterEach(async () => {
-		if (await testRailApi.getResultForCase(runID,caseID) !== 1) {
-			await testRailApi.addResultForCase(runID,caseID,5);
+		if (runWithTestRail) {
+			if (await testRailApi.getResultForCase(runID,caseID) !== 1) {
+				await testRailApi.addResultForCase(runID,caseID,5);
+			}
 		}
 	});
 
@@ -56,12 +63,14 @@ describe.only('Bot section', () => {
 			expect(await botSection.getDefaultSectionURL()).to.equal('dashboard');
 			expect(await botSection.checkDashboardSectionIsActive()).to.equal(true);
 			// update TestRail
-			await testRailApi.addResultForCase(runID,caseID,1);
+			if (runWithTestRail) {
+				await testRailApi.addResultForCase(runID,caseID,1);
+			}
 		});
 	});
 
-	context.only('Open Dashboard page', () => {
-		it(`C34 284 - Check the Dashboard page opens after Login`, async function () {
+	context('Open Dashboard page', () => {
+		it.only(`C34 284 - Check the Dashboard page opens after Login`, async function () {
 			// get test ID
 			caseID = this.test.title.substr(1,3).trim();
 			// run tests
@@ -69,9 +78,11 @@ describe.only('Bot section', () => {
 			expect(await botSection.getDefaultSectionURL()).to.equal('dashboard');
 			expect(await botSection.checkDashboardSectionIsActive()).to.equal(true);
 			// update TestRail
-			await testRailApi.addResultForCase(runID,caseID,1);
+			if (runWithTestRail) {
+				await testRailApi.addResultForCase(runID,caseID,1);
+			}	
 		});
-		it(`C35 284 - Check the Dashboard page opens after Login`, async function () {
+		it.only(`C35 284 - Check the Dashboard page opens after Login`, async function () {
 			// get test ID
 			caseID = this.test.title.substr(1,3).trim();
 			// run tests
@@ -79,7 +90,9 @@ describe.only('Bot section', () => {
 			expect(await botSection.getDefaultSectionURL()).to.equal('dashboard');
 			expect(await botSection.checkDashboardSectionIsActive()).to.equal(true);
 			// update TestRail
-			await testRailApi.addResultForCase(runID,caseID,1);
+			if (runWithTestRail) {
+				await testRailApi.addResultForCase(runID,caseID,1);
+			}	
 		});
 	});
 
@@ -175,7 +188,9 @@ describe.only('Bot section', () => {
 			await botSection.deleteBot('C6165');
 			expect(await botSection.botIsExist('C6165')).to.equal(false, 'C6165 bot did not delete');
 			// update TestRail
-			await testRailApi.addResultForCase(runID,caseID,1);
+			if (runWithTestRail) {
+				await testRailApi.addResultForCase(runID,caseID,1);
+			}	
 		});
 		it('C38 6166 - Check the `Delete NLP Bot` (trained) functionality', async () => {
 			// create bot and check that bot is created

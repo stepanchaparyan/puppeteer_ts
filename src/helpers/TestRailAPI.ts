@@ -64,7 +64,7 @@ export default class TestRailAPIs {
 			headers: this.headers
 		};
 		
-		const data = await this.myFetch(url, options, 'Provide valid project ID and type ID')
+		const data = await this.myFetch(url, options, 'Provided project ID or type ID is not valid')
 		const IDs = jp.query(data, '$..id');
 		return await IDs;
 	}
@@ -79,7 +79,7 @@ export default class TestRailAPIs {
 			headers: this.headers
 		};
 
-		const data = await this.myFetch(url, options, 'Provides run number is not valid')
+		const data = await this.myFetch(url, options, 'Provided run number is not valid')
 		return await data;	
 	}
 
@@ -93,7 +93,7 @@ export default class TestRailAPIs {
 			headers: this.headers
 		};
 
-		const data = await this.myFetch(url, options, 'Provide run ID is not valid')
+		const data = await this.myFetch(url, options, 'Provided run ID is not valid')
 		return await data;	
 	}
 	
@@ -107,7 +107,7 @@ export default class TestRailAPIs {
 			headers: this.headers
 		};
 		
-		const data = await this.myFetch(url, options, 'Provide valid run ID and case ID');
+		const data = await this.myFetch(url, options, 'Provided run ID or case ID is not valid');
 		if (data.length === 0) {
 			return undefined;
 		}
@@ -203,7 +203,7 @@ export default class TestRailAPIs {
 			body: JSON.stringify(body)
 		};
 
-		const data = await this.myFetch(url, options, 'Provided data is not valid')
+		const data = await this.myFetch(url, options, 'Provided project ID or type ID is not valid')
 		return await data.id;	
 	}
 
@@ -241,7 +241,7 @@ export default class TestRailAPIs {
 			body: JSON.stringify(body)
 		};
 
-		const data = await this.myFetch(url, options, 'Provided data is not valid')
+		const data = await this.myFetch(url, options, 'Provided run ID, case ID or status ID is not valid')
 		return await data;	
 	}
 
