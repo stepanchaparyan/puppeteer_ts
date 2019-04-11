@@ -6,8 +6,10 @@ import { DASHBOARD } from '../src/dashboardSection/dashboardConstants';
 import { BOT_SECTION } from '../src/botSection/botsSectionConstants';
 import Utils from '../src/helpers/utils';
 import * as puppeteerSettings from '../settings/puppeteerSettings';
-import TestRailAPI from '../src/helpers/TestRailAPI';
+//import TestRailAPI from '../src/helpers/TestRailAPI';
 import * as args from 'minimist';
+import * as TestRailAPI from '@stepanchaparyan/testrailapi';
+import * as testRailCreds from '../settings/testRailSettings';
 
 let browser: any, page: any, loginPage: any, botSection: any, utils: any;
 let testRailApi: any, runID:number, caseID:any;;
@@ -22,7 +24,7 @@ describe.only('Bot section', () => {
 		utils = new Utils(page);
 		botSection = new BotSection(page);
 		loginPage = new LoginPage(page);
-		testRailApi = new TestRailAPI();
+		testRailApi = new TestRailAPI(testRailCreds.host,testRailCreds.username, testRailCreds.password);
 		await loginPage.open();
 		await loginPage.logIn();
 		if (runWithTestRail) {
