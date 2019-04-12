@@ -1,9 +1,6 @@
 /node_modules
-/src/helpers/screenshots/flowBot/*.png
-/src/helpers/screenshots/NLPBot/*.png
-creds.js
-/settings/creds
-/settings/testRailSettings
+/settings/creds.js
+/settings/testRailSettings.js
 package-lock.json
 .git
 .*.swp
