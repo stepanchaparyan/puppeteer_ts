@@ -6,7 +6,6 @@ import { DASHBOARD } from '../src/dashboardSection/dashboardConstants';
 import { BOT_SECTION } from '../src/botSection/botsSectionConstants';
 import Utils from '../src/helpers/utils';
 import * as puppeteerSettings from '../settings/puppeteerSettings';
-//import TestRailAPI from '../src/helpers/TestRailAPI';
 import * as args from 'minimist';
 import * as TestRailAPI from '@stepanchaparyan/testrailapi';
 import * as testRailCreds from '../settings/testRailSettings';
@@ -48,11 +47,8 @@ describe.only('Bot section', () => {
 
 	context('Create Run on TestRail', () => {
 		it('Simple tests', async () => {
-			//console.log(await testRailApi.addRun(1));
-			//console.log(await testRailApi.getResultsForRun(545,3));
 			//console.log(await testRailApi.getResultForCase(545,32));
 			//runId = await testRailApi.addRunWithType(1,3);
-			//console.log('00 ', id);
 		});
 	});
 
