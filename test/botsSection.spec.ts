@@ -7,7 +7,7 @@ import { BOT_SECTION } from '../src/botSection/botsSectionConstants';
 import Utils from '../src/helpers/utils';
 import * as puppeteerSettings from '../settings/puppeteerSettings';
 import * as args from 'minimist';
-import * as TestRailAPI from '@stepanchaparyan/testrailapi';
+import * as TestRailAPI from 'api-testrail';
 import * as testRailCreds from '../settings/testRailSettings';
 
 let browser: any, page: any, loginPage: any, botSection: any, utils: any;
