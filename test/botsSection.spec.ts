@@ -12,8 +12,9 @@ import * as testRailCreds from '../settings/testRailSettings';
 
 let browser: any, page: any, loginPage: any, botSection: any, utils: any;
 let testRailApi: any, runID:number, caseID:any;;
-const argv = args(process.argv.slice(2));
-const runWithTestRail = argv._[1] === 'TestRail' ? true : false;
+const argumentS = args(process.argv.slice(2));
+const runWithTestRail = argumentS._[1] === 'TestRail' ? true : false;
+const argument2 = argumentS._[2];
 
 describe.only('Bot section', () => {
 	before(async () => {
@@ -26,7 +27,8 @@ describe.only('Bot section', () => {
 		testRailApi = new TestRailAPI(testRailCreds.host,testRailCreds.username, testRailCreds.password);
 		await loginPage.open();
 		await loginPage.logIn();
-		runID = await utils.addRunWithType(testRailApi,1,3);
+		// set runID to argument2 (if exist) or create new run
+		runID = await utils.addRunWithType(argument2,testRailApi,1,3);
 	});
 	after(async () => {
 		await browser.close();

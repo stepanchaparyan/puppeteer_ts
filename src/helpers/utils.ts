@@ -2,8 +2,9 @@ import { BOT_SECTION } from '../botSection/botsSectionConstants';
 import { SIDEMENU } from '../sideMenuSection/sideMenuConstants';
 import * as args from 'minimist';
 
-const argv = args(process.argv.slice(2));
-const runWithTestRail = argv._[1] === 'TestRail' ? true : false;
+const argumentS = args(process.argv.slice(2));
+const runWithTestRail = argumentS._[1] === 'TestRail' ? true : false;
+const argument2 = argumentS._[2];
 
 export default class Utils {
 	private page: any;
@@ -111,13 +112,15 @@ export default class Utils {
 			await testRailApi.addResultForCase(runID,caseID,1);
 		}
 	}
-	public async addRunWithType(testRailApi, projectID, typeID): Promise<void> {
+	public async addRunWithType(argument2, testRailApi, projectID, typeID): Promise<void> {
 		let runID;
 		if (runWithTestRail) {
-			runID = await testRailApi.addRunWithType(projectID, typeID);
-		}
+			if (argument2 == undefined ) {
+				runID = await testRailApi.addRunWithType(projectID, typeID);
+			} else {
+				runID = argument2;
+			}
 		return runID;
+		}	
 	}
-	
 }
-
