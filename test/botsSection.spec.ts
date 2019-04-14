@@ -7,7 +7,7 @@ import { BOT_SECTION } from '../src/botSection/botsSectionConstants';
 import Utils from '../src/helpers/utils';
 import * as puppeteerSettings from '../settings/puppeteerSettings';
 import * as args from 'minimist';
-import * as TestRailAPI from '@stepanchaparyan/testrailapi';
+import * as TestRailAPI from 'api-testrail';
 import * as testRailCreds from '../settings/testRailSettings';
 
 let browser: any, page: any, loginPage: any, botSection: any, utils: any;
@@ -26,9 +26,7 @@ describe.only('Bot section', () => {
 		testRailApi = new TestRailAPI(testRailCreds.host,testRailCreds.username, testRailCreds.password);
 		await loginPage.open();
 		await loginPage.logIn();
-		if (runWithTestRail) {
-			runID = await testRailApi.addRunWithType(1,3);
-		}
+		runID = await utils.addRunWithType(testRailApi,1,3);
 	});
 	after(async () => {
 		await browser.close();
@@ -60,10 +58,8 @@ describe.only('Bot section', () => {
 			expect(await botSection.getDefaultSectionTitle()).to.equal('Dashboard');
 			expect(await botSection.getDefaultSectionURL()).to.equal('dashboard');
 			expect(await botSection.checkDashboardSectionIsActive()).to.equal(true);
-			// update TestRail
-			if (runWithTestRail) {
-				await testRailApi.addResultForCase(runID,caseID,1);
-			}
+			// update TestRail if corresponding argument(TestRail) is provided
+			await utils.addResultForCase(testRailApi, runID, caseID);
 		});
 	});
 
@@ -75,10 +71,8 @@ describe.only('Bot section', () => {
 			expect(await botSection.getDefaultSectionTitle()).to.equal('Dashboard');
 			expect(await botSection.getDefaultSectionURL()).to.equal('dashboard');
 			expect(await botSection.checkDashboardSectionIsActive()).to.equal(true);
-			// update TestRail
-			if (runWithTestRail) {
-				await testRailApi.addResultForCase(runID,caseID,1);
-			}	
+			// update TestRail if corresponding argument(TestRail) is provided
+			await utils.addResultForCase(testRailApi, runID, caseID);	
 		});
 		it.only(`C35 284 - Check the Dashboard page opens after Login`, async function () {
 			// get test ID
@@ -87,24 +81,8 @@ describe.only('Bot section', () => {
 			expect(await botSection.getDefaultSectionTitle()).to.equal('kDashboard');
 			expect(await botSection.getDefaultSectionURL()).to.equal('dashboard');
 			expect(await botSection.checkDashboardSectionIsActive()).to.equal(true);
-			// update TestRail
-			if (runWithTestRail) {
-				await testRailApi.addResultForCase(runID,caseID,1);
-			}	
-		});
-	});
-
-	context('Open Dashboard page', () => {
-		it('C33 284 - Check the Dashboard page opens after Login', async () => {
-		try {
-			expect(await botSection.getDefaultSectionTitle()).to.equal('Dashboard');
-			expect(await botSection.getDefaultSectionURL()).to.equal('kdashboard');
-			expect(await botSection.checkDashboardSectionIsActive()).to.equal(true);
-			await testRailApi.addResultForCase(runID,33,1);
-		} catch (err) {
-			await testRailApi.addResultForCase(runID,33,5,String(err));
-			throw err;
-		}
+			// update TestRail if corresponding argument(TestRail) is provided
+			await utils.addResultForCase(testRailApi, runID, caseID);
 		});
 	});
 
@@ -137,7 +115,6 @@ describe.only('Bot section', () => {
 
 	context('Delete Bots', () => {
 		it('C35 6163 - Check the "Delete Flow Bot" (not trained) functionality', async () => {
-		try {
 			// create bot and check that bot is created
 			await botSection.createFlowBot('C6163');
 			expect(await botSection.botIsExist('C6163')).to.equal(true, 'C6163 Bot is not exist');
@@ -147,11 +124,6 @@ describe.only('Bot section', () => {
 			// delete bot and check that bot is deleted
 			await botSection.deleteBot('C6163');
 			expect(await botSection.botIsExist('C6163')).to.equal(false, 'C6163 bot did not delete');
-			await testRailApi.addResultForCase(runID,35,1);
-		} catch (err) {
-			await testRailApi.addResultForCase(runID,35,5,String(err));
-			throw err;
-		}
 		});
 		it('C36 6164 - Check the `Delete Flow Bot` (trained) functionality', async () => {
 			// create bot and check that bot is created
@@ -185,10 +157,8 @@ describe.only('Bot section', () => {
 			// delete bot and check that bot deleted
 			await botSection.deleteBot('C6165');
 			expect(await botSection.botIsExist('C6165')).to.equal(false, 'C6165 bot did not delete');
-			// update TestRail
-			if (runWithTestRail) {
-				await testRailApi.addResultForCase(runID,caseID,1);
-			}	
+			// update TestRail if corresponding argument(TestRail) is provided
+			await utils.addResultForCase(testRailApi, runID, caseID);	
 		});
 		it('C38 6166 - Check the `Delete NLP Bot` (trained) functionality', async () => {
 			// create bot and check that bot is created
