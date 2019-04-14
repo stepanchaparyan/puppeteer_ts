@@ -19,8 +19,8 @@ export default class LoginPage {
 	}
 	public async logIn() {
 		await this.page.waitForSelector(LOGIN_PAGE.SELECTORS.EMAIL);
-		await this.page.type(LOGIN_PAGE.SELECTORS.EMAIL, CREDS.automationUser);
-		await this.page.type(LOGIN_PAGE.SELECTORS.PASSWORD, CREDS.automationPassword);
+		await this.page.type(LOGIN_PAGE.SELECTORS.EMAIL, CREDS.testingUser);
+		await this.page.type(LOGIN_PAGE.SELECTORS.PASSWORD, CREDS.testingPassword);
 		await this.page.click(LOGIN_PAGE.SELECTORS.LOGIN_BUTTON);
 		await this.page.waitFor(1500);
 	}
