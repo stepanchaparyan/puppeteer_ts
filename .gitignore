@@ -1,6 +1,6 @@
 /node_modules
-/settings/creds
-/settings/testRailSettings
+/settings/creds.js
+/settings/testRailSettings.js
 package-lock.json
 .git
 .*.swp
